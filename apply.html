@@ -18,185 +18,198 @@
 <body>
 
 <header id="siteHeader">
-  <div class="container nav-inner">
-    <a href="index.html" aria-label="Taste Wayfinders home">
-      <img src="assets/logo-white.png" alt="Taste Wayfinders" class="logo-mark logo-white">
-      <img src="assets/logo-color.png" alt="Taste Wayfinders" class="logo-mark logo-color">
-    </a>
-    <nav class="nav-links">
-      <a href="index.html#about">About</a>
-      <a href="index.html#explore">Visas &amp; Relocation</a>
-      <a href="index.html#services">Services</a>
-      <a href="index.html#contact">Contact</a>
-    </nav>
-    <div class="nav-cta">
-      <a href="account.html" class="btn btn-ghost">Log in</a>
-      <a href="index.html#contact" class="btn btn-primary">Plan My Trip</a>
-    </div>
-    <button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-  </div>
+<div class="container nav-inner">
+<a href="index.html" aria-label="Taste Wayfinders home">
+<img src="assets/logo-white.png" alt="Taste Wayfinders" class="logo-mark logo-white">
+<img src="assets/logo-color.png" alt="Taste Wayfinders" class="logo-mark logo-color">
+</a>
+<nav class="nav-links">
+<a href="index.html#about">About</a>
+<a href="index.html#explore">Visas &amp; Relocation</a>
+<a href="index.html#services">Services</a>
+<a href="index.html#contact">Contact</a>
+</nav>
+<div class="nav-cta">
+<a href="account.html" class="btn btn-ghost">Log in</a>
+<a href="index.html#contact" class="btn btn-primary">Plan My Trip</a>
+</div>
+<button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</div>
 </header>
-  <div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <a href="index.html#about">About</a>
-    <a href="index.html#explore">Visas &amp; Relocation</a>
-    <a href="index.html#services">Services</a>
-    <a href="index.html#contact">Contact</a>
-    <a href="account.html">Log in</a>
-    <a href="index.html#contact" class="btn btn-primary" style="margin-top:10px;">Plan My Trip</a>
-  </div>
+<div class="mobile-menu" id="mobileMenu">
+<button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+</button>
+<a href="index.html#about">About</a>
+<a href="index.html#explore">Visas &amp; Relocation</a>
+<a href="index.html#services">Services</a>
+<a href="index.html#contact">Contact</a>
+<a href="account.html">Log in</a>
+<a href="index.html#contact" class="btn btn-primary" style="margin-top:10px;">Plan My Trip</a>
+</div>
 
 <main>
-  <section class="page-hero" style="padding:150px 0 60px;">
-    <div class="color-field"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
-    <div class="container">
-      <div class="breadcrumb"><a href="index.html">Home</a> / Apply Now</div>
-      <span class="eyebrow">Start your application</span>
-      <h1 id="applyHeading">Apply Now!</h1>
-      <p class="lead">Answer a few quick questions and we'll follow up with the next steps for your specific journey.</p>
-    </div>
-  </section>
+<section class="page-hero" style="padding:150px 0 60px;">
+<div class="color-field"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+<div class="container">
+<div class="breadcrumb"><a href="index.html">Home</a> / Apply Now</div>
+<span class="eyebrow">Start your application</span>
+<h1 id="applyHeading">Apply Now!</h1>
+<p class="lead">Answer a few quick questions and we'll follow up with the next steps for your specific journey.</p>
+</div>
+</section>
 
-  <section class="info-section" style="padding-top:50px;">
-    <div class="container">
-      <div class="form-page-wrap">
-        <form id="applyForm" name="application" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="application">
-          <p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+<section class="info-section" style="padding-top:50px;">
+<div class="container">
+<div class="form-page-wrap">
+<form id="applyForm" name="application" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+<input type="hidden" name="form-name" value="application">
+<p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
 
-          <div class="form-row">
-            <div class="field">
-              <label for="aname">Full name</label>
-              <input type="text" id="aname" name="full_name" placeholder="Adaeze Okafor" required>
-            </div>
-            <div class="field">
-              <label for="aemail">Email</label>
-              <input type="email" id="aemail" name="email" placeholder="you@email.com" required>
-            </div>
-          </div>
+<div class="form-row">
+<div class="field">
+<label for="aname">Full name</label>
+<input type="text" id="aname" name="full_name" placeholder="Adaeze Okafor" required>
+</div>
+<div class="field">
+<label for="aemail">Email</label>
+<input type="email" id="aemail" name="email" placeholder="you@email.com" required>
+</div>
+</div>
 
-          <div class="form-row">
-            <div class="field">
-              <label for="aphone">Phone / WhatsApp</label>
-              <input type="tel" id="aphone" name="phone" placeholder="+234 000 000 0000" required>
-            </div>
-            <div class="field">
-              <label for="aservice">Service</label>
-              <select id="aservice" name="service">
-                <option>Visa Consultation</option>
-                <option>Travel Planning</option>
-                <option>Relocation Support</option>
-                <option>UK Tourist Visa</option>
-                <option>UK Study Visa</option>
-                <option>Canada TRV</option>
-                <option>Canada Study Permit</option>
-                <option>Schengen Study Visa</option>
-                <option>Schengen Visit Visa</option>
-                <option>Relocation by Investment</option>
-                <option>Not sure yet</option>
-              </select>
-            </div>
-          </div>
+<div class="form-row">
+<div class="field">
+<label for="aphone">Phone / WhatsApp</label>
+<input type="tel" id="aphone" name="phone" placeholder="+234 000 000 0000" required>
+</div>
+<div class="field">
+<label for="aservice">Service</label>
+<select id="aservice" name="service">
+<option>Visa Consultation</option>
+<option>Travel Planning</option>
+<option>Relocation Support</option>
+<option>UK Tourist Visa</option>
+<option>UK Study Visa</option>
+<option>Canada TRV</option>
+<option>Canada Study Permit</option>
+<option>Schengen Study Visa</option>
+<option>Schengen Visit Visa</option>
+<option>Relocation by Investment</option>
+<option>Not sure yet</option>
+</select>
+</div>
+</div>
 
-          <div class="form-row">
-            <div class="field">
-              <label for="adestination">Destination country</label>
-              <input type="text" id="adestination" name="destination" placeholder="e.g. United Kingdom">
-            </div>
-            <div class="field">
-              <label for="atimeline">When do you plan to travel?</label>
-              <select id="atimeline" name="timeline">
-                <option>Within 1 month</option>
-                <option>1–3 months</option>
-                <option>3–6 months</option>
-                <option>Just exploring options</option>
-              </select>
-            </div>
-          </div>
+<div class="form-row">
+<div class="field">
+<label for="adestination">Destination country</label>
+<input type="text" id="adestination" name="destination" placeholder="e.g. United Kingdom">
+</div>
+<div class="field">
+<label for="atimeline">When do you plan to travel?</label>
+<select id="atimeline" name="timeline">
+<option>Within 1 month</option>
+<option>1–3 months</option>
+<option>3–6 months</option>
+<option>Just exploring options</option>
+</select>
+</div>
+</div>
 
-          <div class="form-row">
-            <div class="field full">
-              <label for="astatus">Do you have any of these already?</label>
-              <select id="astatus" name="documents_status">
-                <option>Nothing yet — starting from scratch</option>
-                <option>I have a passport, nothing else</option>
-                <option>I have an admission/invitation letter</option>
-                <option>I have most documents ready</option>
-              </select>
-            </div>
-          </div>
+<div class="form-row">
+<div class="field full">
+<label for="astatus">Do you have any of these already?</label>
+<select id="astatus" name="documents_status">
+<option>Nothing yet — starting from scratch</option>
+<option>I have a passport, nothing else</option>
+<option>I have an admission/invitation letter</option>
+<option>I have most documents ready</option>
+</select>
+</div>
+</div>
 
-          <div class="form-row">
-            <div class="field full">
-              <label for="amessage">Anything else we should know?</label>
-              <textarea id="amessage" name="message" placeholder="Tell us more about your situation, goals, or questions."></textarea>
-            </div>
-          </div>
+<div class="form-row">
+<div class="field full">
+<label for="amessage">Anything else we should know?</label>
+<textarea id="amessage" name="message" placeholder="Tell us more about your situation, goals, or questions."></textarea>
+</div>
+</div>
 
-          <div class="form-foot">
-            <p class="form-note">By submitting, you agree to be contacted by Taste Wayfinders about your application.</p>
-            <button type="submit" class="btn btn-dark">Submit application
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </button>
-          </div>
-          <p class="form-status" id="applyStatus"></p>
-        </form>
-      </div>
-    </div>
-  </section>
+<div class="form-foot">
+<p class="form-note">By submitting, you agree to be contacted by Taste Wayfinders about your application.</p>
+<button type="submit" class="btn btn-dark">Submit application
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+</button>
+</div>
+<p class="form-status" id="applyStatus"></p>
+</form>
+</div>
+</div>
+</section>
 </main>
 
 <footer>
-  <div class="container">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="assets/logo-white.png" alt="Taste Wayfinders" style="height:30px;width:auto;">
-        <p>Find your way. Taste the world. Purposeful travel, visa consultation, and relocation support — from Africa to the world.</p>
-        <div class="footer-social">
-          <a href="https://www.instagram.com/taste_wayfinders?igsh=MWU5NXVlZ2lyOWxtdg%3D%3D&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
-          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
-          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Explore</h4>
-        <ul>
-          <li><a href="index.html#about">About</a></li>
-          <li><a href="index.html#explore">Visas &amp; Relocation</a></li>
-          <li><a href="index.html#services">Services</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Popular guides</h4>
-        <ul>
-          <li><a href="relocation-by-investment.html">Relocation by Investment</a></li>
-          <li><a href="uk-tourist-visa.html">UK Tourist Visa</a></li>
-          <li><a href="canada-study-visa.html">Canada Study Permit</a></li>
-          <li><a href="schengen-study-visa.html">Schengen Study Visa</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:info@tastetravels.net">info@tastetravels.net</a></li>
-          <li><a href="tel:+2349152395723">+234 915 239 5723</a></li>
-          <li><a href="index.html#contact">Lagos, Nigeria</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Taste Wayfinders. All rights reserved.</span>
-      <span><a href="#">Privacy Policy</a> · <a href="#">Terms</a></span>
-    </div>
-  </div>
+<div class="container">
+<div class="footer-top">
+<div class="footer-brand">
+<img src="assets/logo-white.png" alt="Taste Wayfinders" style="height:30px;width:auto;">
+<p>Find your way. Taste the world. Purposeful travel, visa consultation, and relocation support — from Africa to the world.</p>
+<div class="footer-social">
+<a href="https://www.instagram.com/taste_wayfinders?igsh=MWU5NXVlZ2lyOWxtdg%3D%3D&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+<a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+<a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+</div>
+</div>
+<div class="footer-col">
+<h4>Explore</h4>
+<ul>
+<li><a href="index.html#about">About</a></li>
+<li><a href="index.html#explore">Visas &amp; Relocation</a></li>
+<li><a href="index.html#services">Services</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Popular guides</h4>
+<ul>
+<li><a href="relocation-by-investment.html">Relocation by Investment</a></li>
+<li><a href="uk-tourist-visa.html">UK Tourist Visa</a></li>
+<li><a href="canada-study-visa.html">Canada Study Permit</a></li>
+<li><a href="schengen-study-visa.html">Schengen Study Visa</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Contact</h4>
+<ul>
+<li><a href="mailto:info@tastetravels.net">info@tastetravels.net</a></li>
+<li><a href="tel:+2349152395723">+234 915 239 5723</a></li>
+<li><a href="index.html#contact">Lagos, Nigeria</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<span>© 2026 Taste Wayfinders. All rights reserved.</span>
+<span><a href="#">Privacy Policy</a> · <a href="#">Terms</a></span>
+</div>
+</div>
 </footer>
 
 <script src="main.js"></script>
 <script>
-  prefillServiceFromQuery('aservice');
-  wireUpForm('applyForm', { successMessage: "Thanks — your application is in. We'll reach out on WhatsApp or email within one business day." });
+prefillServiceFromQuery('aservice');
+wireUpForm('applyForm', {
+  successMessage: "Thanks — your application is in. We'll reach out on WhatsApp or email within one business day.",
+  onSuccess: function (formData) {
+    // Also save into Airtable so it shows up in the client's "My Applications"
+    // dashboard. This runs in the background: Netlify Forms already handled the
+    // email notification above, so if this call fails the visitor still sees
+    // the success message and the team still has the email as a fallback.
+    fetch('/.netlify/functions/submit-application', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData)
+    }).catch(function () {});
+  }
+});
 </script>
 </body>
 </html>
