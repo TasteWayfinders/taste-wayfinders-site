@@ -9,6 +9,9 @@
 // this call fails for any reason, the visitor still sees their normal success
 // message — the team just also has the email as a fallback.
 
+const MAX_ATTACHMENTS = 5;
+const MAX_ATTACHMENT_BYTES = 4 * 1024 * 1024; // 4MB — stays under Airtable's 5MB API limit
+
 exports.handler = async (event) => {
   if (event.httpMethod !== 'POST') {
     return {
@@ -68,6 +71,8 @@ exports.handler = async (event) => {
     updated_at: new Date().toISOString(),
   };
 
+  let recordId;
+
   try {
     const res = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(tableName)}`, {
       method: 'POST',
@@ -88,15 +93,66 @@ exports.handler = async (event) => {
       };
     }
 
-    return {
-      statusCode: 200,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ok: true, id: respData.records && respData.records[0] && respData.records[0].id }),
-    };
+    recordId = respData.records && respData.records[0] && respData.records[0].id;
   } catch (err) {
     return {
       statusCode: 500,
       body: JSON.stringify({ error: err.message }),
     };
   }
+
+  // Attach any uploaded documents to the new record. This is a best-effort
+  // enhancement: the application itself is already saved above, so a failure
+  // here (including the "documents" attachment field not existing yet in
+  // Airtable) never fails the whole request — it just gets noted in the
+  // response for debugging.
+  const attachmentErrors = [];
+  const attachments = Array.isArray(data.attachments) ? data.attachments.slice(0, MAX_ATTACHMENTS) : [];
+
+  if (recordId && attachments.length) {
+    for (const att of attachments) {
+      if (!att || !att.base64 || !att.filename) continue;
+
+      // Rough size check on the decoded content (base64 is ~4/3 the size of the original bytes).
+      const approxBytes = Math.floor((att.base64.length * 3) / 4);
+      if (approxBytes > MAX_ATTACHMENT_BYTES) {
+        attachmentErrors.push(`${att.filename} was too large and was skipped.`);
+        continue;
+      }
+
+      try {
+        const uploadRes = await fetch(
+          `https://content.airtable.com/v0/${baseId}/${recordId}/documents/uploadAttachment`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              contentType: att.contentType || 'application/octet-stream',
+              filename: att.filename,
+              file: att.base64,
+            }),
+          }
+        );
+        if (!uploadRes.ok) {
+          const uploadErr = await uploadRes.json().catch(() => ({}));
+          attachmentErrors.push(`${att.filename}: ${(uploadErr.error && uploadErr.error.message) || uploadRes.status}`);
+        }
+      } catch (err) {
+        attachmentErrors.push(`${att.filename}: ${err.message}`);
+      }
+    }
+  }
+
+  return {
+    statusCode: 200,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      ok: true,
+      id: recordId,
+      attachmentErrors: attachmentErrors.length ? attachmentErrors : undefined,
+    }),
+  };
 };
