@@ -65,6 +65,19 @@
     display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
     gap:16px; margin-bottom:32px;
   }
+  .app-record-docs{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin-top:8px;
+  }
+  .app-record-docs a{
+    font-size:12.5px; font-weight:600; color:var(--violet);
+    background:var(--violet-pale);
+    border-radius:100px;
+    padding:5px 12px;
+    text-decoration:none;
+    display:inline-block;
+  }
+  .app-record-docs a:hover{ color:var(--purple-deep); }
 </style>
 </head>
 <body>
@@ -255,7 +268,8 @@ function renderApplications(records) {
         <span class="status-badge status-${statusSlug(r.status)}">${escapeHtml(r.status)}</span>
       </div>
       ${r.notes ? `<p>${escapeHtml(r.notes)}</p>` : ''}
-      ${r.document_link ? `<a href="${escapeHtml(r.document_link)}" target="_blank" rel="noopener">View documents →</a>` : ''}
+      ${(r.documents && r.documents.length) ? `<div class="app-record-docs">${r.documents.map(d => `<a href="${escapeHtml(d.url)}" target="_blank" rel="noopener">📎 ${escapeHtml(d.filename || 'Document')}</a>`).join('')}</div>` : ''}
+      ${(!r.documents || !r.documents.length) && r.document_link ? `<a href="${escapeHtml(r.document_link)}" target="_blank" rel="noopener">View documents →</a>` : ''}
       ${r.updated_at ? `<time>Updated ${new Date(r.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</time>` : ''}
     </div>
   `).join('');
