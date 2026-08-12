@@ -50,6 +50,13 @@ exports.handler = async (event, context) => {
       status: r.fields.status || 'Submitted',
       notes: r.fields.notes || '',
       document_link: r.fields.document_link || '',
+      // "documents" is an Airtable Attachment-type field: an array of files,
+      // each with its own hosted url/filename. Note these urls are only
+      // guaranteed valid for a couple of hours after Airtable returns them,
+      // which is fine since the client is viewing them live right now.
+      documents: Array.isArray(r.fields.documents)
+        ? r.fields.documents.map((f) => ({ url: f.url, filename: f.filename }))
+        : [],
       updated_at: r.fields.updated_at || r.createdTime,
     }));
 
