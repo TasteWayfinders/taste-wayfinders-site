@@ -14,200 +14,291 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<style>
+  /* Scoped to this page: layout for the logged-in client portal. */
+  .portal-grid{
+    display:grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap:32px;
+    align-items:start;
+  }
+  @media (max-width: 860px){
+    .portal-grid{ grid-template-columns: 1fr; }
+  }
+  .portal-panel{
+    background:var(--white);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg, 20px);
+    padding:26px 28px;
+  }
+  .portal-panel h3{
+    font-size:16px; margin:0 0 16px;
+  }
+  .service-tile-grid{
+    display:grid;
+    gap:12px;
+  }
+  .service-tile{
+    display:flex; flex-direction:column; gap:3px;
+    padding:14px 16px;
+    border:1px solid var(--line);
+    border-radius:14px;
+    text-decoration:none;
+    color:inherit;
+    transition: border-color .15s ease, transform .15s ease, background .15s ease;
+  }
+  .service-tile:hover{
+    border-color: var(--violet);
+    background: var(--violet-pale);
+    transform: translateY(-1px);
+  }
+  .service-tile strong{
+    font-family:'Fredoka',sans-serif;
+    font-size:14.5px;
+    color:var(--purple-deep);
+  }
+  .service-tile span{
+    font-size:13px;
+    color:var(--muted);
+  }
+  .portal-header{
+    display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between;
+    gap:16px; margin-bottom:32px;
+  }
+</style>
 </head>
 <body>
 
 <header id="siteHeader">
-  <div class="container nav-inner">
-    <a href="index.html" aria-label="Taste Wayfinders home">
-      <img src="assets/logo-white.png" alt="Taste Wayfinders" class="logo-mark logo-white">
-      <img src="assets/logo-color.png" alt="Taste Wayfinders" class="logo-mark logo-color">
-    </a>
-    <nav class="nav-links">
-      <a href="index.html#about">About</a>
-      <a href="index.html#explore">Visas &amp; Relocation</a>
-      <a href="index.html#services">Services</a>
-      <a href="index.html#contact">Contact</a>
-    </nav>
-    <div class="nav-cta">
-      <a href="account.html" class="btn btn-ghost">Log in</a>
-      <a href="index.html#contact" class="btn btn-primary">Plan My Trip</a>
-    </div>
-    <button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
-  </div>
+<div class="container nav-inner">
+<a href="index.html" aria-label="Taste Wayfinders home">
+<img src="assets/logo-white.png" alt="Taste Wayfinders" class="logo-mark logo-white">
+<img src="assets/logo-color.png" alt="Taste Wayfinders" class="logo-mark logo-color">
+</a>
+<nav class="nav-links">
+<a href="index.html#about">About</a>
+<a href="index.html#explore">Visas &amp; Relocation</a>
+<a href="index.html#services">Services</a>
+<a href="index.html#contact">Contact</a>
+</nav>
+<div class="nav-cta">
+<a href="account.html" class="btn btn-ghost">Log in</a>
+<a href="index.html#contact" class="btn btn-primary">Plan My Trip</a>
+</div>
+<button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+</div>
 </header>
-  <div class="mobile-menu" id="mobileMenu">
-    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
-      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-    </button>
-    <a href="index.html#about">About</a>
-    <a href="index.html#explore">Visas &amp; Relocation</a>
-    <a href="index.html#services">Services</a>
-    <a href="index.html#contact">Contact</a>
-    <a href="account.html">Log in</a>
-    <a href="index.html#contact" class="btn btn-primary" style="margin-top:10px;">Plan My Trip</a>
-  </div>
+<div class="mobile-menu" id="mobileMenu">
+<button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+</button>
+<a href="index.html#about">About</a>
+<a href="index.html#explore">Visas &amp; Relocation</a>
+<a href="index.html#services">Services</a>
+<a href="index.html#contact">Contact</a>
+<a href="account.html">Log in</a>
+<a href="index.html#contact" class="btn btn-primary" style="margin-top:10px;">Plan My Trip</a>
+</div>
 
 <main>
-  <section class="page-hero" style="padding:150px 0 60px;">
-    <div class="color-field"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
-    <div class="container">
-      <div class="breadcrumb"><a href="index.html">Home</a> / My Account</div>
-      <span class="eyebrow">Client area</span>
-      <h1>My Account</h1>
-      <p class="lead">Log in or create an account to keep track of your applications with Taste Wayfinders.</p>
-    </div>
-  </section>
+<section class="page-hero" style="padding:150px 0 60px;">
+<div class="color-field"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+<div class="container">
+<div class="breadcrumb"><a href="index.html">Home</a> / My Account</div>
+<span class="eyebrow">Client area</span>
+<h1>My Account</h1>
+<p class="lead">Log in or create an account to keep track of your applications with Taste Wayfinders.</p>
+</div>
+</section>
 
-  <section class="info-section" style="padding-top:50px;">
-    <div class="container">
-      <div class="form-page-wrap" style="text-align:center;">
+<section class="info-section" style="padding-top:50px;">
+<div class="container">
 
-        <div id="loggedOutView">
-          <div class="icon-badge dark" style="width:64px;height:64px;border-radius:20px;margin:0 auto 20px;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:30px;height:30px;"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
-          </div>
-          <h2 style="margin-bottom:10px;">Welcome back</h2>
-          <p style="color:var(--muted); margin-bottom:28px;">Log in to your existing account, or create a new one — it takes less than a minute.</p>
-          <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-            <button class="btn btn-primary" onclick="netlifyIdentity.open('login')">Log In</button>
-            <button class="btn btn-ghost" style="color:var(--purple-deep); border-color:var(--line);" onclick="netlifyIdentity.open('signup')">Create Account</button>
-          </div>
-        </div>
+<div id="loggedOutView">
+<div class="form-page-wrap" style="text-align:center;">
+<div class="icon-badge dark" style="width:64px;height:64px;border-radius:20px;margin:0 auto 20px;">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:30px;height:30px;"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+</div>
+<h2 style="margin-bottom:10px;">Welcome back</h2>
+<p style="color:var(--muted); margin-bottom:28px;">Log in to your existing account, or create a new one — it takes less than a minute.</p>
+<div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+<button class="btn btn-primary" onclick="netlifyIdentity.open('login')">Log In</button>
+<button class="btn btn-ghost" style="color:var(--purple-deep); border-color:var(--line);" onclick="netlifyIdentity.open('signup')">Create Account</button>
+</div>
+</div>
+</div>
 
-        <div id="loggedInView" style="display:none;">
-          <div class="icon-badge dark" style="width:64px;height:64px;border-radius:20px;margin:0 auto 20px;">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:30px;height:30px;"><path d="M9 12l2 2 4-4M12 2a10 10 0 100 20 10 10 0 000-20z"/></svg>
-          </div>
-          <h2 style="margin-bottom:6px;">Welcome, <span id="userEmail"></span></h2>
-          <p style="color:var(--muted); margin-bottom:28px;">You're logged in to your Taste Wayfinders account.</p>
+<div id="loggedInView" style="display:none;">
 
-          <div style="text-align:left; margin-bottom:28px;">
-            <h3 style="font-size:16px; margin-bottom:14px;">My Applications</h3>
-            <div id="applicationsList">
-              <p style="color:var(--muted); font-size:14.5px;">Loading your applications…</p>
-            </div>
-          </div>
+<div class="portal-header">
+<div>
+<h2 style="margin-bottom:6px;">Welcome, <span id="userEmail"></span></h2>
+<p style="color:var(--muted); margin:0;">You're logged in to your Taste Wayfinders account.</p>
+</div>
+<div style="display:flex; gap:12px; flex-wrap:wrap;">
+<a href="apply.html" class="btn btn-primary">Start a New Application</a>
+<button class="btn btn-ghost" style="color:var(--purple-deep); border-color:var(--line);" onclick="netlifyIdentity.logout()">Log Out</button>
+</div>
+</div>
 
-          <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
-            <a href="index.html#explore" class="btn btn-primary">Start a New Application</a>
-            <button class="btn btn-ghost" style="color:var(--purple-deep); border-color:var(--line);" onclick="netlifyIdentity.logout()">Log Out</button>
-          </div>
-        </div>
+<div class="portal-grid">
 
-      </div>
-    </div>
-  </section>
+<div class="portal-panel">
+<h3>My Applications</h3>
+<div id="applicationsList">
+<p style="color:var(--muted); font-size:14.5px;">Loading your applications…</p>
+</div>
+</div>
+
+<div class="portal-panel">
+<h3>Explore Services</h3>
+<div class="service-tile-grid">
+<a href="uk-tourist-visa.html" class="service-tile">
+<strong>UK Tourist Visa</strong>
+<span>Plan a visit to the United Kingdom</span>
+</a>
+<a href="uk-study-visa.html" class="service-tile">
+<strong>UK Study Visa</strong>
+<span>Study in the United Kingdom</span>
+</a>
+<a href="canada-trv.html" class="service-tile">
+<strong>Canada TRV</strong>
+<span>Temporary Resident Visa for Canada</span>
+</a>
+<a href="canada-study-visa.html" class="service-tile">
+<strong>Canada Study Permit</strong>
+<span>Study in Canada</span>
+</a>
+<a href="schengen-visit-visa.html" class="service-tile">
+<strong>Schengen Visit Visa</strong>
+<span>Travel across Europe's Schengen area</span>
+</a>
+<a href="schengen-study-visa.html" class="service-tile">
+<strong>Schengen Study Visa</strong>
+<span>Study in a Schengen country</span>
+</a>
+<a href="relocation-by-investment.html" class="service-tile">
+<strong>Relocation by Investment</strong>
+<span>Residency &amp; citizenship programs</span>
+</a>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</section>
 </main>
 
 <footer>
-  <div class="container">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <img src="assets/logo-white.png" alt="Taste Wayfinders" style="height:30px;width:auto;">
-        <p>Find your way. Taste the world. Purposeful travel, visa consultation, and relocation support — from Africa to the world.</p>
-        <div class="footer-social">
-          <a href="https://www.instagram.com/taste_wayfinders?igsh=MWU5NXVlZ2lyOWxtdg%3D%3D&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
-          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
-          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
-        </div>
-      </div>
-      <div class="footer-col">
-        <h4>Explore</h4>
-        <ul>
-          <li><a href="index.html#about">About</a></li>
-          <li><a href="index.html#explore">Visas &amp; Relocation</a></li>
-          <li><a href="index.html#services">Services</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Popular guides</h4>
-        <ul>
-          <li><a href="relocation-by-investment.html">Relocation by Investment</a></li>
-          <li><a href="uk-tourist-visa.html">UK Tourist Visa</a></li>
-          <li><a href="canada-study-visa.html">Canada Study Permit</a></li>
-          <li><a href="schengen-study-visa.html">Schengen Study Visa</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <ul>
-          <li><a href="mailto:info@tastetravels.net">info@tastetravels.net</a></li>
-          <li><a href="tel:+2349152395723">+234 915 239 5723</a></li>
-          <li><a href="index.html#contact">Lagos, Nigeria</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span>© 2026 Taste Wayfinders. All rights reserved.</span>
-      <span><a href="#">Privacy Policy</a> · <a href="#">Terms</a></span>
-    </div>
-  </div>
+<div class="container">
+<div class="footer-top">
+<div class="footer-brand">
+<img src="assets/logo-white.png" alt="Taste Wayfinders" style="height:30px;width:auto;">
+<p>Find your way. Taste the world. Purposeful travel, visa consultation, and relocation support — from Africa to the world.</p>
+<div class="footer-social">
+<a href="https://www.instagram.com/taste_wayfinders?igsh=MWU5NXVlZ2lyOWxtdg%3D%3D&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+<a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4l16 16M20 4L4 20"/></svg></a>
+<a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+</div>
+</div>
+<div class="footer-col">
+<h4>Explore</h4>
+<ul>
+<li><a href="index.html#about">About</a></li>
+<li><a href="index.html#explore">Visas &amp; Relocation</a></li>
+<li><a href="index.html#services">Services</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Popular guides</h4>
+<ul>
+<li><a href="relocation-by-investment.html">Relocation by Investment</a></li>
+<li><a href="uk-tourist-visa.html">UK Tourist Visa</a></li>
+<li><a href="canada-study-visa.html">Canada Study Permit</a></li>
+<li><a href="schengen-study-visa.html">Schengen Study Visa</a></li>
+</ul>
+</div>
+<div class="footer-col">
+<h4>Contact</h4>
+<ul>
+<li><a href="mailto:info@tastetravels.net">info@tastetravels.net</a></li>
+<li><a href="tel:+2349152395723">+234 915 239 5723</a></li>
+<li><a href="index.html#contact">Lagos, Nigeria</a></li>
+</ul>
+</div>
+</div>
+<div class="footer-bottom">
+<span>© 2026 Taste Wayfinders. All rights reserved.</span>
+<span><a href="#">Privacy Policy</a> · <a href="#">Terms</a></span>
+</div>
+</div>
 </footer>
 
 <script src="main.js"></script>
 <script>
-  function statusSlug(status) {
-    return status.toLowerCase().replace(/[^a-z]+/g, '-').replace(/(^-|-$)/g, '');
-  }
+function statusSlug(status) {
+  return status.toLowerCase().replace(/[^a-z]+/g, '-').replace(/(^-|-$)/g, '');
+}
 
-  function renderApplications(records) {
-    const container = document.getElementById('applicationsList');
-    if (!records.length) {
-      container.innerHTML = '<p style="color:var(--muted); font-size:14.5px;">No applications yet — start one below and it\'ll show up here.</p>';
-      return;
-    }
-    container.innerHTML = records.map(r => `
-      <div class="app-record">
-        <div class="app-record-head">
-          <strong>${escapeHtml(r.service)}</strong>
-          <span class="status-badge status-${statusSlug(r.status)}">${escapeHtml(r.status)}</span>
-        </div>
-        ${r.notes ? `<p>${escapeHtml(r.notes)}</p>` : ''}
-        ${r.document_link ? `<a href="${escapeHtml(r.document_link)}" target="_blank" rel="noopener">View documents →</a>` : ''}
-        ${r.updated_at ? `<time>Updated ${new Date(r.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</time>` : ''}
+function renderApplications(records) {
+  const container = document.getElementById('applicationsList');
+  if (!records.length) {
+    container.innerHTML = '<p style="color:var(--muted); font-size:14.5px;">No applications yet — start one and it\'ll show up here.</p>';
+    return;
+  }
+  container.innerHTML = records.map(r => `
+    <div class="app-record">
+      <div class="app-record-head">
+        <strong>${escapeHtml(r.service)}</strong>
+        <span class="status-badge status-${statusSlug(r.status)}">${escapeHtml(r.status)}</span>
       </div>
-    `).join('');
-  }
+      ${r.notes ? `<p>${escapeHtml(r.notes)}</p>` : ''}
+      ${r.document_link ? `<a href="${escapeHtml(r.document_link)}" target="_blank" rel="noopener">View documents →</a>` : ''}
+      ${r.updated_at ? `<time>Updated ${new Date(r.updated_at).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</time>` : ''}
+    </div>
+  `).join('');
+}
 
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
 
-  async function loadApplications(user) {
-    const container = document.getElementById('applicationsList');
-    try {
-      const token = user.token && user.token.access_token;
-      const res = await fetch('/.netlify/functions/get-applications', {
-        headers: { Authorization: 'Bearer ' + token },
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Failed to load');
-      renderApplications(data.records || []);
-    } catch (e) {
-      container.innerHTML = '<p style="color:var(--muted); font-size:14.5px;">Couldn\'t load applications right now — the dashboard may still be getting set up. Reach out anytime at <a href="mailto:info@tastetravels.net" style="color:var(--purple-deep); font-weight:600;">info@tastetravels.net</a>.</p>';
-    }
+async function loadApplications(user) {
+  const container = document.getElementById('applicationsList');
+  try {
+    const token = user.token && user.token.access_token;
+    const res = await fetch('/.netlify/functions/get-applications', {
+      headers: { Authorization: 'Bearer ' + token },
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Failed to load');
+    renderApplications(data.records || []);
+  } catch (e) {
+    container.innerHTML = '<p style="color:var(--muted); font-size:14.5px;">Couldn\'t load applications right now — the dashboard may still be getting set up. Reach out anytime at <a href="mailto:info@tastetravels.net" style="color:var(--purple-deep); font-weight:600;">info@tastetravels.net</a>.</p>';
   }
+}
 
-  function showLoggedIn(user) {
-    document.getElementById('loggedOutView').style.display = 'none';
-    document.getElementById('loggedInView').style.display = 'block';
-    document.getElementById('userEmail').textContent =
-      (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : user.email;
-    loadApplications(user);
-  }
-  function showLoggedOut() {
-    document.getElementById('loggedOutView').style.display = 'block';
-    document.getElementById('loggedInView').style.display = 'none';
-  }
-  window.onIdentityLogin = showLoggedIn;
-  window.onIdentityLogout = showLoggedOut;
-  window.onIdentityUnavailable = () => {
-    document.getElementById('loggedOutView').innerHTML =
-      '<p style="color:var(--muted);">Account login isn\'t active yet. If you\'re the site owner, enable <strong>Identity</strong> in your Netlify project settings to turn this on.</p>';
-  };
+function showLoggedIn(user) {
+  document.getElementById('loggedOutView').style.display = 'none';
+  document.getElementById('loggedInView').style.display = 'block';
+  document.getElementById('userEmail').textContent =
+    (user.user_metadata && user.user_metadata.full_name) ? user.user_metadata.full_name : user.email;
+  loadApplications(user);
+}
+function showLoggedOut() {
+  document.getElementById('loggedOutView').style.display = 'block';
+  document.getElementById('loggedInView').style.display = 'none';
+}
+window.onIdentityLogin = showLoggedIn;
+window.onIdentityLogout = showLoggedOut;
+window.onIdentityUnavailable = () => {
+  document.getElementById('loggedOutView').innerHTML =
+    '<p style="color:var(--muted);">Account login isn\'t active yet. If you\'re the site owner, enable <strong>Identity</strong> in your Netlify project settings to turn this on.</p>';
+};
 </script>
 </body>
 </html>
