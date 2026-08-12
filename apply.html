@@ -11,7 +11,7 @@
 <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
 <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
@@ -130,6 +130,15 @@
 
 <div class="form-row">
 <div class="field full">
+<label for="adocuments">Attach documents (optional)</label>
+<input type="file" id="adocuments" name="documents" multiple accept=".pdf,.jpg,.jpeg,.png,.heic">
+<p class="form-note" style="margin-top:8px;">e.g. passport photo page, admission letter, photos — up to 5 files, 4MB each (PDF, JPG, PNG).</p>
+<p class="form-status" id="uploadStatus" style="margin-top:6px;"></p>
+</div>
+</div>
+
+<div class="form-row">
+<div class="field full">
 <label for="amessage">Anything else we should know?</label>
 <textarea id="amessage" name="message" placeholder="Tell us more about your situation, goals, or questions."></textarea>
 </div>
@@ -196,19 +205,84 @@
 <script src="main.js"></script>
 <script>
 prefillServiceFromQuery('aservice');
+
+// ---------- Document attachments ----------
+// Files are read into memory as Base64 and sent as JSON to the
+// submit-application function, which uploads each one straight into
+// Airtable's attachment field for this application. Capped client-side
+// to stay well under Airtable's 5MB-per-file API limit.
+const MAX_FILES = 5;
+const MAX_FILE_BYTES = 4 * 1024 * 1024; // 4MB
+
+function readFileAsBase64(file) {
+return new Promise(function (resolve, reject) {
+const reader = new FileReader();
+reader.onload = function () {
+const result = reader.result || '';
+const base64 = String(result).split(',')[1] || '';
+resolve({ filename: file.name, contentType: file.type || 'application/octet-stream', base64: base64 });
+};
+reader.onerror = function () { reject(new Error('Could not read ' + file.name)); };
+reader.readAsDataURL(file);
+});
+}
+
+// wireUpForm() calls form.reset() right before onSuccess fires, which clears
+// the file input's .files list. So we grab the selected files the instant
+// the form is submitted (via our own listener, registered before wireUpForm's)
+// and hang onto them in this variable, rather than re-reading the input later.
+let pendingFiles = [];
+(function () {
+const docInput = document.getElementById('adocuments');
+const applyFormEl = document.getElementById('applyForm');
+if (applyFormEl && docInput) {
+applyFormEl.addEventListener('submit', function () {
+pendingFiles = docInput.files ? Array.from(docInput.files).slice(0, MAX_FILES) : [];
+});
+}
+})();
+
+async function collectAttachments() {
+const status = document.getElementById('uploadStatus');
+if (!pendingFiles.length) return [];
+
+const files = pendingFiles;
+const tooBig = files.filter(function (f) { return f.size > MAX_FILE_BYTES; });
+if (tooBig.length) {
+if (status) status.textContent = tooBig.map(function (f) { return f.name; }).join(', ') + ' is over the 4MB limit and was skipped.';
+}
+const okFiles = files.filter(function (f) { return f.size <= MAX_FILE_BYTES; });
+if (!okFiles.length) return [];
+
+if (status) status.textContent = 'Attaching ' + okFiles.length + ' file' + (okFiles.length > 1 ? 's' : '') + '…';
+try {
+const attachments = await Promise.all(okFiles.map(readFileAsBase64));
+if (status) status.textContent = '';
+return attachments;
+} catch (e) {
+if (status) status.textContent = "Couldn't read one of the files — the rest of your application will still go through.";
+return [];
+}
+}
+
 wireUpForm('applyForm', {
-  successMessage: "Thanks — your application is in. We'll reach out on WhatsApp or email within one business day.",
-  onSuccess: function (formData) {
-    // Also save into Airtable so it shows up in the client's "My Applications"
-    // dashboard. This runs in the background: Netlify Forms already handled the
-    // email notification above, so if this call fails the visitor still sees
-    // the success message and the team still has the email as a fallback.
-    fetch('/.netlify/functions/submit-application', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData)
-    }).catch(function () {});
-  }
+successMessage: "Thanks — your application is in. We'll reach out on WhatsApp or email within one business day.",
+onSuccess: async function (formData) {
+// Also save into Airtable so it shows up in the client's "My Applications"
+// dashboard. This runs in the background: Netlify Forms already handled the
+// email notification above, so if this call fails the visitor still sees
+// the success message and the team still has the email as a fallback.
+const attachments = await collectAttachments();
+const payload = Object.assign({}, formData);
+delete payload.documents; // raw File(s), not JSON-serializable — replaced below
+payload.attachments = attachments;
+
+fetch('/.netlify/functions/submit-application', {
+method: 'POST',
+headers: { 'Content-Type': 'application/json' },
+body: JSON.stringify(payload)
+}).catch(function () {});
+}
 });
 </script>
 </body>
