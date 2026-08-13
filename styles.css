@@ -199,11 +199,12 @@
     z-index:100;
     padding:18px 0;
     transition:background .35s ease, padding .35s ease, box-shadow .35s ease;
-  }
-  header.scrolled{
-    background:rgba(255,255,255,0.9);
+    background:rgba(255,255,255,0.96);
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 30px -18px rgba(48,26,77,0.25);
+  }
+  header.scrolled{
     padding:12px 0;
     box-shadow:0 8px 30px -18px rgba(48,26,77,0.4);
   }
@@ -211,19 +212,16 @@
     display:flex; align-items:center; justify-content:space-between;
   }
   .logo-mark{ height:34px; width:auto; transition:opacity .3s ease; }
-  .logo-color{display:none;}
-  .logo-white{display:block;}
-  header.scrolled .logo-color{display:block;}
-  header.scrolled .logo-white{display:none;}
+  .logo-color{display:block;}
+  .logo-white{display:none;}
   .nav-links{
     display:flex; align-items:center; gap:38px;
     font-family:'Fredoka', sans-serif;
     font-weight:500;
     font-size:15px;
-    color:var(--white);
+    color:var(--purple-deep);
     transition:color .3s ease;
   }
-  header.scrolled .nav-links{ color:var(--purple-deep); }
   .nav-links a{ position:relative; padding:4px 0; }
   .nav-links a::after{
     content:'';
@@ -235,9 +233,8 @@
   }
   .nav-links a:hover::after{ width:100%; }
   .nav-cta{ display:flex; align-items:center; gap:18px; }
-  .nav-cta .btn-ghost{ color:var(--white); }
-  header.scrolled .nav-cta .btn-ghost{ color:var(--purple-deep); border-color:var(--line); }
-  header.scrolled .nav-cta .btn-ghost:hover{ background:var(--violet-pale); }
+  .nav-cta .btn-ghost{ color:var(--purple-deep); border-color:var(--line); }
+  .nav-cta .btn-ghost:hover{ background:var(--violet-pale); }
   .burger{
     display:none;
     width:26px; height:20px; position:relative; cursor:pointer; z-index:200;
@@ -245,9 +242,8 @@
   }
   .burger span{
     position:absolute; left:0; width:100%; height:2px; border-radius:2px;
-    background:var(--white); transition:all .3s ease;
+    background:var(--purple-deep); transition:all .3s ease;
   }
-  header.scrolled .burger span{ background:var(--purple-deep); }
   .burger span:nth-child(1){ top:0; }
   .burger span:nth-child(2){ top:9px; }
   .burger span:nth-child(3){ top:18px; }
