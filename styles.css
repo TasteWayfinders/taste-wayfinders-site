@@ -1,4 +1,90 @@
 
+/* ---------- DESTINATIONS MARQUEE (auto-scrolling, two rows) ---------- */
+.dest-marquee-row{ overflow:hidden; width:100%; }
+.dest-marquee-row + .dest-marquee-row{ margin-top:18px; }
+.dest-marquee-track{
+  display:flex; gap:18px; width:max-content;
+}
+.dest-marquee-track.dir-left{ animation:destMarqueeLeft 52s linear infinite; }
+.dest-marquee-track.dir-right{ animation:destMarqueeRight 58s linear infinite; }
+.dest-marquee-row:hover .dest-marquee-track{ animation-play-state:paused; }
+@keyframes destMarqueeLeft{ from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+@keyframes destMarqueeRight{ from{ transform:translateX(-50%); } to{ transform:translateX(0); } }
+.dest-pill{
+  position:relative; flex:none;
+  width:230px; height:270px;
+  border-radius:20px; overflow:hidden;
+}
+.dest-pill img{
+  width:100%; height:100%; object-fit:cover; display:block;
+  transition:transform .6s cubic-bezier(.2,.7,.3,1);
+}
+.dest-pill:hover img{ transform:scale(1.08); }
+.dest-pill::after{
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(200deg, transparent 40%, rgba(48,26,77,0.85) 100%);
+}
+.dest-pill .dest-label{ position:absolute; left:14px; bottom:12px; z-index:2; color:var(--white); }
+@media (prefers-reduced-motion: reduce){
+  .dest-marquee-track.dir-left, .dest-marquee-track.dir-right{ animation:none; }
+}
+@media (max-width:640px){
+  .dest-pill{ width:180px; height:220px; }
+}
+
+/* ---------- JOURNEY VIDEO STORY ---------- */
+.journey-video-section{ margin:70px 0; }
+.journey-video-wrap{
+  position:relative; height:560px; overflow:hidden;
+  border-radius:0;
+}
+.journey-video-wrap video{
+  position:absolute; inset:0; width:100%; height:100%;
+  object-fit:cover; display:block; background:var(--purple-deeper);
+}
+.journey-video-overlay{
+  position:absolute; inset:0;
+  background:linear-gradient(0deg, rgba(32,18,47,0.82) 0%, rgba(32,18,47,0.1) 50%, rgba(32,18,47,0.45) 100%);
+  display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+  text-align:center; padding:44px 24px 48px; gap:18px;
+}
+.journey-video-overlay .eyebrow{ color:var(--gold-light); background:rgba(232,172,78,0.16); border-color:rgba(232,172,78,0.4); }
+.journey-caption{
+  color:var(--white); font-family:'Fredoka',sans-serif; font-weight:600;
+  font-size:clamp(20px,3vw,30px); max-width:640px; line-height:1.25;
+  text-shadow:0 2px 14px rgba(0,0,0,0.45);
+  transition:opacity .3s ease;
+}
+@media (max-width:640px){
+  .journey-video-wrap{ height:440px; }
+}
+
+/* ---------- ADDED COLOR: process steps, why-us icons ---------- */
+.process-step:nth-child(1) .step-num{ border-color:var(--coral); color:var(--coral-deep); }
+.process-step:nth-child(1):hover .step-num{ background:var(--coral); color:var(--white); }
+.process-step:nth-child(2) .step-num{ border-color:var(--gold); color:var(--gold-deep); }
+.process-step:nth-child(2):hover .step-num{ background:var(--gold); color:var(--white); }
+.process-step:nth-child(3) .step-num{ border-color:var(--teal); color:var(--teal-deep); }
+.process-step:nth-child(3):hover .step-num{ background:var(--teal); color:var(--white); }
+.process-step:nth-child(4) .step-num{ border-color:var(--violet-hot); color:var(--violet-hot); }
+.process-step:nth-child(4):hover .step-num{ background:var(--violet-hot); color:var(--white); }
+
+.why-item:nth-child(1) .icon-badge{ background:rgba(255,128,105,0.18); }
+.why-item:nth-child(1) .icon-badge svg{ stroke:var(--coral); }
+.why-item:nth-child(2) .icon-badge{ background:rgba(232,172,78,0.2); }
+.why-item:nth-child(2) .icon-badge svg{ stroke:var(--gold-light); }
+.why-item:nth-child(3) .icon-badge{ background:rgba(43,196,176,0.2); }
+.why-item:nth-child(3) .icon-badge svg{ stroke:var(--teal); }
+.why-item:nth-child(4) .icon-badge{ background:rgba(182,92,232,0.2); }
+.why-item:nth-child(4) .icon-badge svg{ stroke:var(--violet-hot); }
+
+/* Livelier CTA + section touches */
+.btn-primary{ background:var(--gradient-sunset); }
+.motiv-arrow{ background:rgba(255,255,255,0.14); }
+.motiv-arrow:hover{ background:var(--coral); }
+.social-row a:hover, .footer-social a:hover{ color:var(--gold-light); }
+
   :root{
     --purple-deep:#301A4D;
     --purple-deeper:#20122F;
