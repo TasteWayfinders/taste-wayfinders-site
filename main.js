@@ -224,3 +224,154 @@ function initNavAuthState() {
   netlifyIdentity.init();
 }
 document.addEventListener('DOMContentLoaded', initNavAuthState);
+
+// ---------- Chat assistant widget ----------
+// Guided-topics assistant: tap a question for a pre-written answer, or type
+// your own and we match it against the same topics by keyword. No AI model
+// behind this — it's intentionally simple and honest about what it can do,
+// with "Talk to a real person" always one tap away on WhatsApp.
+(function () {
+  const TOPICS = [
+    {
+      keywords: ['start', 'apply', 'begin', 'application'],
+      q: 'How do I start my application?',
+      a: "Head to our Apply page and tell us your destination and the service you need — we'll follow up with next steps within one business day.",
+      cta: { label: 'Go to Apply page', href: 'apply.html' }
+    },
+    {
+      keywords: ['document', 'documents', 'paperwork', 'passport'],
+      q: 'What documents do I need?',
+      a: "It depends on your visa type, but most applications need a valid passport, proof of funds, and supporting documents like an invitation or admission letter. We'll send you the exact checklist once we know your destination."
+    },
+    {
+      keywords: ['time', 'long', 'how long', 'processing', 'wait'],
+      q: 'How long does the process take?',
+      a: 'Processing times vary by country and service — anywhere from a few days to a few weeks. Well give you a realistic timeline during your consultation.'
+    },
+    {
+      keywords: ['country', 'countries', 'uk', 'canada', 'schengen', 'cover'],
+      q: 'Which countries do you cover?',
+      a: 'We regularly help with the UK, Canada, Schengen countries, and relocation-by-investment programmes — plus general travel planning almost anywhere.'
+    },
+    {
+      keywords: ['not sure', 'decided', "don't know", 'unsure', 'options'],
+      q: "What if I haven't decided yet?",
+      a: "That's completely fine — tell us your situation on our Apply page and we'll help you figure out the right path.",
+      cta: { label: 'Tell us your situation', href: 'apply.html' }
+    },
+    {
+      keywords: ['price', 'cost', 'fee', 'fees', 'much', 'pay'],
+      q: 'How much does it cost?',
+      a: "Costs depend on the service and destination, so we don't quote a flat number here — tell us your situation and we'll give you clear pricing before you commit to anything."
+    }
+  ];
+
+  const WHATSAPP_URL = 'https://wa.me/2349152395723';
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function buildWidget() {
+    const bubble = document.createElement('button');
+    bubble.className = 'twf-chat-bubble';
+    bubble.setAttribute('aria-label', 'Open chat assistant');
+    bubble.innerHTML =
+      '<svg class="twf-chat-open-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>' +
+      '<svg class="twf-chat-close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>';
+
+    const panel = document.createElement('div');
+    panel.className = 'twf-chat-panel';
+    panel.innerHTML =
+      '<div class="twf-chat-head">' +
+        '<strong>Taste Wayfinders Assistant</strong>' +
+        '<span>Automated \u00b7 usually replies instantly</span>' +
+      '</div>' +
+      '<div class="twf-chat-body" id="twfChatBody">' +
+        '<div class="twf-chat-msg">Hi! I\'m the Taste Wayfinders assistant. Ask me a question, or tap a topic below.</div>' +
+        '<div class="twf-chat-topics" id="twfChatTopics"></div>' +
+      '</div>' +
+      '<a href="' + WHATSAPP_URL + '" target="_blank" rel="noopener" class="twf-chat-human">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>' +
+        'Talk to a real person' +
+      '</a>' +
+      '<div class="twf-chat-input-row">' +
+        '<input type="text" id="twfChatInput" placeholder="Ask a question…" autocomplete="off">' +
+        '<button id="twfChatSend" aria-label="Send">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>' +
+        '</button>' +
+      '</div>';
+
+    document.body.appendChild(panel);
+    document.body.appendChild(bubble);
+
+    const topicsWrap = panel.querySelector('#twfChatTopics');
+    TOPICS.forEach(function (t) {
+      const btn = document.createElement('button');
+      btn.textContent = t.q;
+      btn.addEventListener('click', function () { askTopic(t); });
+      topicsWrap.appendChild(btn);
+    });
+
+    bubble.addEventListener('click', function () {
+      const isOpen = panel.classList.toggle('open');
+      bubble.classList.toggle('open', isOpen);
+      bubble.setAttribute('aria-label', isOpen ? 'Close chat assistant' : 'Open chat assistant');
+    });
+
+    const body = panel.querySelector('#twfChatBody');
+    const input = panel.querySelector('#twfChatInput');
+    const sendBtn = panel.querySelector('#twfChatSend');
+
+    function addMessage(text, isUser, cta) {
+      const msg = document.createElement('div');
+      msg.className = 'twf-chat-msg' + (isUser ? ' twf-user' : '');
+      msg.innerHTML = escapeHtml(text);
+      if (cta) {
+        const link = document.createElement('a');
+        link.href = cta.href;
+        link.textContent = cta.label + ' \u2192';
+        link.style.cssText = 'display:inline-block;margin-top:8px;font-weight:700;color:var(--violet);text-decoration:none;';
+        msg.appendChild(document.createElement('br'));
+        msg.appendChild(link);
+      }
+      body.appendChild(msg);
+      body.scrollTop = body.scrollHeight;
+    }
+
+    function askTopic(t) {
+      addMessage(t.q, true);
+      setTimeout(function () { addMessage(t.a, false, t.cta); }, 300);
+    }
+
+    function handleFreeText() {
+      const value = input.value.trim();
+      if (!value) return;
+      addMessage(value, true);
+      input.value = '';
+      const lower = value.toLowerCase();
+      const match = TOPICS.find(function (t) {
+        return t.keywords.some(function (k) { return lower.indexOf(k) !== -1; });
+      });
+      setTimeout(function () {
+        if (match) {
+          addMessage(match.a, false, match.cta);
+        } else {
+          addMessage(
+            "I'm not totally sure on that one — tap \u201cTalk to a real person\u201d above and our team will help directly.",
+            false
+          );
+        }
+      }, 300);
+    }
+
+    sendBtn.addEventListener('click', handleFreeText);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') handleFreeText();
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', buildWidget);
+})();
