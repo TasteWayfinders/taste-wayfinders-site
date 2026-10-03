@@ -67,7 +67,7 @@
   <section class="info-section">
     <div class="container">
       <div class="form-page-wrap">
-        <p class="lede" style="margin-bottom:28px;">Grenada's Citizenship by Investment programme offers visa-free access to the Schengen Area, the UK and China, and uniquely opens eligibility for the US E-2 Investor Visa. This private briefing walks qualified applicants through the programme in detail. Applications are reviewed to keep the briefing relevant for everyone who attends — tell us a little about your goals below.</p>
+        <p class="lede" id="grenadaLede" style="margin-bottom:28px;">Grenada's Citizenship by Investment programme offers visa-free access to the Schengen Area, the UK and China, and uniquely opens eligibility for the US E-2 Investor Visa. Tell us a little about your goals below to request access to the private briefing.</p>
 
         <form id="grenadaForm" name="grenada-briefing" method="POST" data-netlify="true" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="grenada-briefing">
@@ -196,6 +196,7 @@
 <script>
 (function () {
   const form = document.getElementById('grenadaForm');
+  const lede = document.getElementById('grenadaLede');
   const thanks = document.getElementById('grenadaThanks');
   wireUpForm('grenadaForm', {
     successMessage: '',
@@ -208,6 +209,7 @@
       }).catch(function () {});
       // Same confirmation for everyone, regardless of tier — no visible screening.
       form.style.display = 'none';
+      if (lede) lede.style.display = 'none';
       if (thanks) thanks.style.display = 'block';
     }
   });
