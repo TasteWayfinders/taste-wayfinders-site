@@ -13,6 +13,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Compact hero for this ad landing page — gets visitors to the form faster */
+  .page-hero{ padding:108px 0 26px; }
+  .page-hero h1{ margin:12px 0 10px; }
+  .page-hero p.lead{ margin-bottom:0; }
+  .info-section{ padding:32px 0 70px; }
+  @media (max-width:640px){
+    .page-hero{ padding:90px 0 22px; }
+  }
+</style>
 <script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
@@ -52,22 +62,16 @@
   <section class="page-hero">
     <div class="color-field"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
     <div class="container">
-      <div class="breadcrumb"><a href="index.html">Home</a> / Private Executive Briefing</div>
       <span class="eyebrow">By invitation · Grenada Citizenship by Investment</span>
       <h1>Grenada Citizenship &amp; US E-2 Visa Access</h1>
-      <p class="lead">Request access to our Private Executive Briefing — hosted in partnership with Immigrant Invest, a licensed migration agency operating since 2006.</p>
-      <div class="page-hero-meta">
-        <div class="stat"><strong>Grenada CBI</strong><span>From $235,000</span></div>
-        <div class="stat"><strong>E-2 eligible</strong><span>US Investor Visa pathway</span></div>
-        <div class="stat"><strong>By application</strong><span>Reviewed for relevance</span></div>
-      </div>
+      <p class="lead">Hosted with our partner Immigrant Invest — from $235,000, with US E-2 Visa eligibility.</p>
     </div>
   </section>
 
   <section class="info-section">
     <div class="container">
       <div class="form-page-wrap">
-        <p class="lede" id="grenadaLede" style="margin-bottom:28px;">Grenada's Citizenship by Investment programme offers visa-free access to the Schengen Area, the UK and China, and uniquely opens eligibility for the US E-2 Investor Visa. Tell us a little about your goals below to request access to the private briefing.</p>
+        <p class="lede" id="grenadaLede" style="margin-bottom:22px;">Grenada's Citizenship by Investment programme offers visa-free access to the Schengen Area, the UK and China. Tell us a little about your goals below to request access.</p>
 
         <form id="grenadaForm" name="grenada-briefing" method="POST" data-netlify="true" netlify-honeypot="bot-field">
           <input type="hidden" name="form-name" value="grenada-briefing">
