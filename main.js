@@ -1,3 +1,34 @@
+// ---------- Meta Pixel (single install point: main.js is loaded once on every page) ----------
+// Tracks PageView on load, Lead after a confirmed form submission, and Contact when a
+// visitor taps a WhatsApp / phone / email link. No form fields or personal data are sent.
+(function () {
+  if (window.__twfPixelLoaded) return; // never initialise twice
+  window.__twfPixelLoaded = true;
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1764990068113578');
+  fbq('track', 'PageView');
+
+  // Contact: WhatsApp, phone and email links (event delegation also covers the chat widget's
+  // dynamically-added "Talk to a real person" link).
+  document.addEventListener('click', function (e) {
+    const a = e.target.closest && e.target.closest('a[href]');
+    if (!a || typeof window.fbq !== 'function') return;
+    const href = (a.getAttribute('href') || '').toLowerCase();
+    let method = null;
+    if (href.indexOf('wa.me/') !== -1 || href.indexOf('api.whatsapp.com') !== -1) method = 'whatsapp';
+    else if (href.indexOf('tel:') === 0) method = 'phone';
+    else if (href.indexOf('mailto:') === 0) method = 'email';
+    if (method) window.fbq('track', 'Contact', { content_name: method });
+  });
+})();
+
 // ---------- Header scroll state ----------
 const header = document.getElementById('siteHeader');
 if (header) {
@@ -89,6 +120,9 @@ function wireUpForm(formId, opts) {
     })
       .then((res) => {
         if (!res.ok) throw new Error('Form not registered by Netlify yet');
+        // Meta Pixel: Lead fires only here, after the server confirmed the submission.
+        // Only the form's id is sent (e.g. "applyForm") — never any field values.
+        if (typeof window.fbq === 'function') window.fbq('track', 'Lead', { content_name: formId });
         if (status) status.textContent = opts.successMessage || "Thanks — we've received this. We'll be in touch soon.";
         form.reset();
         // Pass the submitted data along, in case the caller needs it after reset()
