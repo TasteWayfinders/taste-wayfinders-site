@@ -439,9 +439,11 @@ document.addEventListener('DOMContentLoaded', initNavAuthState);
     addLink(document.getElementById('mobileMenu'));
     var fl = document.querySelector('.footer-col ul');
     if (fl && !fl.querySelector('a[href="consultation.html"]')) {
-      var li = document.createElement('li');
-      li.innerHTML = '<a href="consultation.html">Book a Consultation</a>';
-      fl.appendChild(li);
+      [['consultation.html', 'Book a Consultation'], ['eligibility.html', 'Free Visa Readiness Check'], ['checklists.html', 'Document Checklists'], ['results.html', 'Recent Approvals'], ['founder.html', 'About the Founder']].forEach(function (x) {
+        var li = document.createElement('li');
+        li.innerHTML = '<a href="' + x[0] + '">' + x[1] + '</a>';
+        fl.appendChild(li);
+      });
     }
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
