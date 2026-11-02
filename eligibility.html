@@ -83,6 +83,7 @@
   <input type="hidden" name="form-name" value="eligibility">
   <p style="display:none;"><label>Do not fill this out if you are human: <input name="bot-field"></label></p>
   <input type="hidden" name="destination">
+  <input type="hidden" name="dest_other">
   <input type="hidden" name="purpose">
   <input type="hidden" name="adults">
   <input type="hidden" name="children">
@@ -181,6 +182,7 @@
   var EMP = 'employment';
   var steps = [
     { k: 'destination', q: 'Where do you want to go?', o: ['United Kingdom', 'Canada', 'Schengen (Europe)', 'United States', 'China', 'Another country'] },
+    { k: 'dest_other', q: 'Which country do you want to go to?', text: true, show: is('destination', 'Another country') },
     { k: 'purpose', q: 'What is the main purpose of the trip?', o: ['Tourism or visiting family and friends', 'Business trip or conference', 'Study', 'Medical treatment', 'Something else'] },
     { k: 'adults', q: 'How many adults (18 and above) will apply, including you?', o: ['1', '2', '3', '4', '5 or more'] },
     { k: 'children', q: 'How many children (under 18) will apply with you?', o: ['None', '1', '2', '3', '4 or more'] },
@@ -203,6 +205,7 @@
     { k: 'documents', q: 'How ready are your supporting documents (bank statements, letters, ID, photos)?', o: ['Mostly ready', 'Some ready', 'Not yet'] },
     { k: 'timeline', q: 'When do you plan to travel?', o: ['Within 1 month', 'In 1 to 3 months', 'In more than 3 months', 'Just exploring'] }
   ];
+  function dest() { return (A.destination === 'Another country' && A.dest_other) ? A.dest_other : A.destination; }
   function vis(i) { return !steps[i].show || steps[i].show(); }
   function save(k, v) { A[k] = v; if (form.elements[k]) form.elements[k].value = v; }
   function visible() { return steps.filter(function (s, i) { return vis(i); }); }
@@ -217,6 +220,16 @@
     if (prevIdx(idx) >= 0) h += '<button type="button" class="wiz-back" id="wBack">&larr; Back</button>';
     wiz.innerHTML = h;
     wiz.querySelector('.wiz-q').textContent = s.q;
+    if (s.text) {
+      var inp = document.createElement('input'); inp.type = 'text'; inp.className = 'wopt'; inp.placeholder = 'Type the country'; inp.value = A[s.k] || '';
+      var go = document.createElement('button'); go.type = 'button'; go.className = 'btn btn-dark'; go.textContent = 'Continue'; go.style.marginTop = '8px';
+      var proceed = function () { var v = inp.value.trim(); if (!v) { inp.focus(); return; } save(s.k, v); idx = nextIdx(idx); render(); };
+      go.addEventListener('click', proceed);
+      inp.addEventListener('keydown', function (ev) { if (ev.key === 'Enter') { ev.preventDefault(); proceed(); } });
+      document.getElementById('wOpts').appendChild(inp); document.getElementById('wOpts').appendChild(go);
+      var bk0 = document.getElementById('wBack'); if (bk0) bk0.addEventListener('click', function () { idx = prevIdx(idx); render(); });
+      return;
+    }
     var box = document.getElementById('wOpts');
     s.o.forEach(function (label) {
       var b = document.createElement('button'); b.type = 'button'; b.className = 'wopt' + (A[s.k] === label ? ' sel' : ''); b.textContent = label;
@@ -272,7 +285,7 @@
   }
   function summary(r) {
     var prof = A[EMP] + (A.emp_a ? ' [' + [A.emp_a, A.emp_b, A.emp_c].filter(Boolean).join(' / ') + ']' : '');
-    return 'Destination: ' + A.destination + ' | Purpose: ' + A.purpose + ' | Applicants: ' + applicants() + ' | Work: ' + prof + ' | Funds: ' + A.funds + ' | Travel history: ' + A.travel_history + ' | Refusals: ' + A.refusals + ' | Property: ' + A.ties_property + ' | Dependants in Nigeria: ' + A.ties_family + ' | Passport: ' + A.passport + ' | Documents: ' + A.documents + ' | Timeline: ' + A.timeline + ' | Score: ' + r.score + '/12';
+    return 'Destination: ' + dest() + ' | Purpose: ' + A.purpose + ' | Applicants: ' + applicants() + ' | Work: ' + prof + ' | Funds: ' + A.funds + ' | Travel history: ' + A.travel_history + ' | Refusals: ' + A.refusals + ' | Property: ' + A.ties_property + ' | Dependants in Nigeria: ' + A.ties_family + ' | Passport: ' + A.passport + ' | Documents: ' + A.documents + ' | Timeline: ' + A.timeline + ' | Score: ' + r.score + '/12';
   }
   function showContact() {
     var r = evaluate();
@@ -287,15 +300,15 @@
     onSuccess: function (d) {
       var r = evaluate();
       var title, text;
-      if (r.qualifies) { title = 'Good news: you can proceed to apply'; text = 'Based on your answers, you are in a good position to start your application for ' + A.destination + ' (' + applicants() + '). Start now and our team will guide you from there.'; }
-      else { title = 'You need a professional consultation first'; text = 'Based on your answers, applying now for ' + A.destination + ' could be risky. A professional consultation will show you exactly what to fix, and the right timing, before you apply.'; }
+      if (r.qualifies) { title = 'Good news: you can proceed to apply'; text = 'Based on your answers, you are in a good position to start your application for ' + dest() + ' (' + applicants() + '). Start now and our team will guide you from there.'; }
+      else { title = 'You need a professional consultation first'; text = 'Based on your answers, applying now for ' + dest() + ' could be risky. A professional consultation will show you exactly what to fix, and the right timing, before you apply.'; }
       document.getElementById('eligTitle').textContent = title;
       var p = document.getElementById('eligText'); p.innerHTML = ''; p.appendChild(document.createTextNode(text));
       if (r.tips.length) { var ul = document.createElement('ul'); ul.style.margin = '8px 0 0 18px'; r.tips.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); }); p.appendChild(ul); }
       var act = document.getElementById('eligActions'); act.innerHTML = '';
       var a1 = document.createElement('a'); a1.className = 'btn btn-dark';
       if (r.qualifies) {
-        var msg = 'Hello Taste Wayfinders, I passed the Visa Readiness Check and I want to start my application. Name: ' + d.full_name + '. Destination: ' + A.destination + '. Purpose: ' + A.purpose + '. Applicants: ' + applicants() + '. Work: ' + A[EMP] + '. Timeline: ' + A.timeline + '.';
+        var msg = 'Hello Taste Wayfinders, I passed the Visa Readiness Check and I want to start my application. Name: ' + d.full_name + '. Destination: ' + dest() + '. Purpose: ' + A.purpose + '. Applicants: ' + applicants() + '. Work: ' + A[EMP] + '. Timeline: ' + A.timeline + '.';
         a1.href = 'https://wa.me/2349152395723?text=' + encodeURIComponent(msg); a1.target = '_blank'; a1.rel = 'noopener'; a1.textContent = 'Start my application on WhatsApp';
       } else { a1.href = 'consultation.html'; a1.textContent = 'Book a professional consultation (₦20,000)'; }
       act.appendChild(a1);
@@ -303,7 +316,7 @@
       var res = document.getElementById('eligResult'); res.style.display = 'block'; res.scrollIntoView({ behavior: 'smooth', block: 'center' });
       try {
         fetch('/.netlify/functions/submit-enquiry', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ source: 'eligibility', name: d.full_name, email: d.email, phone: d.phone, interest: A.destination, purpose: A.purpose, message: 'Result: ' + (r.qualifies ? 'QUALIFIED to apply' : 'NEEDS CONSULTATION') + ' | ' + summary(r) }) }).catch(function () {});
+          body: JSON.stringify({ source: 'eligibility', name: d.full_name, email: d.email, phone: d.phone, interest: dest(), purpose: A.purpose, message: 'Result: ' + (r.qualifies ? 'QUALIFIED to apply' : 'NEEDS CONSULTATION') + ' | ' + summary(r) }) }).catch(function () {});
       } catch (e) {}
     }
   });
