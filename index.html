@@ -580,7 +580,18 @@
 
 <script src="main.js"></script>
 <script>
-  wireUpForm('contactForm', { successMessage: "Thanks — your message is in. We'll be in touch soon." });
+  wireUpForm('contactForm', {
+    successMessage: "Thanks — your message is in. We'll be in touch soon.",
+    onSuccess: function (d) {
+      try {
+        fetch('/.netlify/functions/submit-enquiry', {
+          method: 'POST', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'contact', name: d.fname, email: d.femail, phone: d.fphone, interest: d.fservice, message: d.fmessage })
+        }).catch(function () {});
+      } catch (e) {}
+    }
+  });
 
   // ---------- Journey video story ----------
   // Cycles through a handful of short stock clips (apply -> visa -> airport ->
