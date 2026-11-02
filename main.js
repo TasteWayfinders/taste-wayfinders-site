@@ -296,7 +296,8 @@ document.addEventListener('DOMContentLoaded', initNavAuthState);
     {
       keywords: ['price', 'cost', 'fee', 'fees', 'much', 'pay'],
       q: 'How much does it cost?',
-      a: "Costs depend on the service and destination, so we don't quote a flat number here — tell us your situation and we'll give you clear pricing before you commit to anything."
+      a: "Our visa consultation is ₦20,000 for a one-on-one session. Professional processing fees depend on your case and are quoted after your consultation, so you always know the cost before you commit.",
+      cta: { label: 'Book a consultation', href: 'consultation.html' }
     }
   ];
 
@@ -408,4 +409,40 @@ document.addEventListener('DOMContentLoaded', initNavAuthState);
   }
 
   document.addEventListener('DOMContentLoaded', buildWidget);
+})();
+
+// ---------- WhatsApp button + consultation links (added site-wide) ----------
+(function () {
+  function init() {
+    if (document.getElementById('twfWaFloat')) return;
+    var topic = (document.title || '').split('|')[0].trim() || 'your services';
+    var msg = encodeURIComponent('Hello Taste Wayfinders, I would like to ask about: ' + topic);
+    var st = document.createElement('style');
+    st.textContent = '#twfWaFloat{position:fixed;left:16px;bottom:18px;z-index:9998;display:flex;align-items:center;gap:8px;background:#25D366;color:#fff;text-decoration:none;font:600 14px "Plus Jakarta Sans",sans-serif;padding:11px 16px 11px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.25)}#twfWaFloat:hover{filter:brightness(.95)}#twfWaFloat svg{width:24px;height:24px}@media(max-width:560px){#twfWaFloat span{display:none}#twfWaFloat{padding:12px}}';
+    document.head.appendChild(st);
+    var a = document.createElement('a');
+    a.id = 'twfWaFloat';
+    a.href = 'https://wa.me/2349152395723?text=' + msg;
+    a.target = '_blank'; a.rel = 'noopener';
+    a.setAttribute('aria-label', 'Chat with us on WhatsApp');
+    a.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 01-12.400 7.400L3 20.500l1.700-5.400A8.500 8.500 0 1121 11.500z"/><path d="M9 8.500c.3 2.600 2.900 5.200 5.600 5.700l1.400-1.300-2-1-.8.800c-1-.4-2-1.400-2.400-2.400l.8-.8-1-2z" fill="#fff" stroke="none"/></svg><span>Chat on WhatsApp</span>';
+    document.body.appendChild(a);
+
+    function addLink(container) {
+      if (!container || container.querySelector('a[href="consultation.html"]')) return;
+      var l = document.createElement('a');
+      l.href = 'consultation.html'; l.textContent = 'Book a Consultation';
+      var anchor = container.querySelector('a[href$="#contact"]');
+      container.insertBefore(l, anchor || null);
+    }
+    addLink(document.querySelector('.nav-links'));
+    addLink(document.getElementById('mobileMenu'));
+    var fl = document.querySelector('.footer-col ul');
+    if (fl && !fl.querySelector('a[href="consultation.html"]')) {
+      var li = document.createElement('li');
+      li.innerHTML = '<a href="consultation.html">Book a Consultation</a>';
+      fl.appendChild(li);
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
