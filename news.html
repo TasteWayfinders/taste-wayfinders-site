@@ -114,6 +114,22 @@
   <p>We don't auto-publish unverified updates. Whenever there's reason to believe something has changed — or simply on a regular check-in — we pull the latest directly from each government's official page and refresh what you see here, keeping the source link visible so you can always double-check for yourself.</p>
 </div>
 
+      <div class="note-banner reveal" style="margin-top:24px;">
+        <strong>Get visa updates when they change</strong>
+        <p>Leave your details and we'll message you when we update this page with important visa news.</p>
+        <form id="newsForm" name="news-subscribe" method="POST" data-netlify="true" netlify-honeypot="bot-field" style="margin-top:10px;">
+          <input type="hidden" name="form-name" value="news-subscribe">
+          <p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+          <div class="form-row">
+            <div class="field"><label for="nName">Name</label><input type="text" id="nName" name="full_name" required></div>
+            <div class="field"><label for="nEmail">Email</label><input type="email" id="nEmail" name="email" required></div>
+          </div>
+          <div class="form-row"><div class="field full"><label for="nPhone">WhatsApp number (optional)</label><input type="tel" id="nPhone" name="phone" placeholder="+234 000 000 0000"></div></div>
+          <button type="submit" class="btn btn-dark" style="margin-top:6px;">Subscribe</button>
+          <p class="form-status" id="newsStatus"></p>
+        </form>
+      </div>
+
       <div class="cta-banner reveal">
         <h3>Have a question about your specific case?</h3>
         <p>Processing times and policies vary by visa type and personal circumstances — tell us your situation and we'll walk you through what actually applies to you.</p>
@@ -171,5 +187,17 @@
 </footer>
 
 <script src="main.js"></script>
+<script>
+wireUpForm('newsForm', {
+  successMessage: "Thanks, you're on the list. We'll be in touch when there's an important update.",
+  onSuccess: function (d) {
+    try {
+      fetch('/.netlify/functions/submit-enquiry', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ source: 'newsletter', name: d.full_name, email: d.email, phone: d.phone, message: 'News update subscription' }) }).catch(function () {});
+    } catch (e) {}
+  }
+});
+</script>
+
 </body>
 </html>
