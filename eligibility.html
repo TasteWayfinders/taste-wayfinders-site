@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visa Readiness Check | Taste Wayfinders</title>
+<meta name="description" content="Free visa readiness check for the UK, Canada and Schengen. Answer a few questions and see what to prepare before you apply.">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Compact hero for this ad landing page — gets visitors to the form faster */
+  .page-hero{ padding:108px 0 26px; }
+  .page-hero h1{ margin:12px 0 10px; }
+  .page-hero p.lead{ margin-bottom:0; }
+  .info-section{ padding:32px 0 70px; }
+  @media (max-width:640px){
+    .page-hero{ padding:90px 0 22px; }
+  }
+</style>
+<script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="container nav-inner">
+    <a href="index.html" aria-label="Taste Wayfinders home">
+      <img src="assets/logo-white.png" alt="Taste Wayfinders" class="logo-mark logo-white">
+      <img src="assets/logo-color.png" alt="Taste Wayfinders" class="logo-mark logo-color">
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#explore">Visas &amp; Relocation</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="account.html" class="btn btn-ghost">Log in</a>
+      <a href="index.html#contact" class="btn btn-primary">Plan My Trip</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <a href="index.html#about">About</a>
+    <a href="index.html#explore">Visas &amp; Relocation</a>
+    <a href="index.html#services">Services</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="account.html">Log in</a>
+    <a href="index.html#contact" class="btn btn-primary" style="margin-top:10px;">Plan My Trip</a>
+  </div>
+
+<main>
+  <section class="page-hero">
+    <div class="color-field"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+    <div class="container">
+      <span class="eyebrow">Free · 2 minutes</span>
+      <h1>Visa Readiness Check</h1>
+      <p class="lead">Answer a few questions to see how prepared your application is and what to work on first.</p>
+    </div>
+  </section>
+  <section class="info-section">
+    <div class="container">
+      <div class="form-page-wrap">
+        <form id="eligForm" name="eligibility" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="eligibility">
+          <p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+          <div class="form-row"><div class="field full"><label for="eDest">Where do you want to go?</label><select id="eDest" name="destination" required><option value="" disabled selected>Select an option</option><option>United Kingdom</option><option>Canada</option><option>Schengen / Europe</option></select></div></div>
+          <div class="form-row"><div class="field full"><label for="ePurpose">What is the purpose?</label><select id="ePurpose" name="purpose" required><option value="" disabled selected>Select an option</option><option>Visit / tourism</option><option>Study</option><option>Work</option><option>Business</option></select></div></div>
+          <div class="form-row"><div class="field full"><label for="eHistory">Your travel history</label><select id="eHistory" name="travel_history" required><option value="" disabled selected>Select an option</option><option>Travelled abroad before, with no refusals</option><option>Travelled abroad before, with a refusal</option><option>Never travelled abroad</option></select></div></div>
+          <div class="form-row"><div class="field full"><label for="eFunds">Are your funds ready?</label><select id="eFunds" name="funds" required><option value="" disabled selected>Select an option</option><option>Yes, I can show 6 months of healthy bank statements</option><option>Partly, I need to build up my funds</option><option>No, not yet</option></select></div></div>
+          <div class="form-row"><div class="field full"><label for="eDocs">Your supporting documents (employment or business proof, invitation or admission, accommodation, etc.)</label><select id="eDocs" name="documents" required><option value="" disabled selected>Select an option</option><option>Mostly ready</option><option>Some of them</option><option>Not started</option></select></div></div>
+          <div class="form-row">
+            <div class="field"><label for="eName">Full name</label><input type="text" id="eName" name="full_name" required></div>
+            <div class="field"><label for="eEmail">Email</label><input type="email" id="eEmail" name="email" required></div>
+          </div>
+          <div class="form-row"><div class="field full"><label for="ePhone">WhatsApp number</label><input type="tel" id="ePhone" name="phone" placeholder="+234 000 000 0000" required></div></div>
+          <div class="form-foot">
+            <p class="form-note">We use your details to send your result and follow up on WhatsApp. This is a general guide only and does not guarantee an outcome.</p>
+            <button type="submit" class="btn btn-dark">See my result</button>
+          </div>
+          <p class="form-status" id="eligStatus"></p>
+        </form>
+        <div class="note-banner" id="eligResult" style="display:none;margin-top:24px;">
+          <strong id="eligTitle"></strong>
+          <p id="eligText"></p>
+          <p style="margin-top:10px;"><a href="consultation.html" class="btn btn-dark">Book a consultation (₦20,000)</a> &nbsp; <a href="checklists.html" style="font-weight:600;color:var(--purple-deep);">See document checklists →</a></p>
+          <p style="margin-top:10px;font-size:13px;color:var(--muted);">This check is a general guide, not a decision. Visa outcomes are decided by the relevant government.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo-white.png" alt="Taste Wayfinders" style="height:30px;width:auto;">
+        <p>Find your way. Taste the world. Purposeful travel, visa consultation, and relocation support — from Africa to the world.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/taste_wayfinders?igsh=MWU5NXVlZ2lyOWxtdg%3D%3D&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#explore">Visas &amp; Relocation</a></li>
+          <li><a href="index.html#services">Services</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Popular guides</h4>
+        <ul>
+          <li><a href="relocation-by-investment.html">Relocation by Investment</a></li>
+          <li><a href="uk-tourist-visa.html">UK Tourist Visa</a></li>
+          <li><a href="canada-study-visa.html">Canada Study Permit</a></li>
+          <li><a href="schengen-study-visa.html">Schengen Study Visa</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@tastetravels.net">info@tastetravels.net</a></li>
+          <li><a href="tel:+2349152395723">+234 915 239 5723</a></li>
+          <li><a href="index.html#contact">Lagos, Nigeria</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Taste Wayfinders. All rights reserved.</span>
+      <span><a href="#">Privacy Policy</a> · <a href="#">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+(function () {
+  var form = document.getElementById('eligForm');
+  wireUpForm('eligForm', {
+    successMessage: '',
+    onSuccess: function (d) {
+      var score = 0, tips = [];
+      if (d.travel_history.indexOf('no refusals') > -1) score += 2;
+      else if (d.travel_history.indexOf('refusal') > -1) { score += 1; tips.push('A previous refusal needs a careful, honest explanation. Do not reapply until the reason is addressed.'); }
+      else tips.push('With no travel history, show strong ties to Nigeria (job or business, family, property).');
+      if (d.funds.indexOf('Yes') === 0) score += 2;
+      else if (d.funds.indexOf('Partly') === 0) { score += 1; tips.push('Build and keep your funds steady in your account. Sudden large deposits raise questions.'); }
+      else tips.push('Funds are the biggest gap. Plan how you will show genuine, traceable funds before applying.');
+      if (d.documents.indexOf('Mostly') === 0) score += 2;
+      else if (d.documents.indexOf('Some') === 0) { score += 1; tips.push('Gather the missing documents first. Our checklists show what to prepare.'); }
+      else tips.push('Start with the document checklist for your route.');
+      var title, text;
+      if (score >= 5) { title = 'Looking well prepared'; text = 'You appear to be in a good position for ' + d.destination + '. A short consultation can confirm that your documents tell a consistent story before you apply.'; }
+      else if (score >= 3) { title = 'Nearly there: a few things to fix first'; text = 'You have a base to build on for ' + d.destination + ', but some areas need work before applying.'; }
+      else { title = 'Needs preparation before you apply'; text = 'Applying now could be risky for ' + d.destination + '. Let us help you plan the right steps and timing.'; }
+      document.getElementById('eligTitle').textContent = title;
+      document.getElementById('eligText').innerHTML = '';
+      var p = document.getElementById('eligText');
+      p.appendChild(document.createTextNode(text));
+      if (tips.length) { var ul = document.createElement('ul'); ul.style.margin = '8px 0 0 18px'; tips.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); }); p.appendChild(ul); }
+      document.getElementById('eligResult').style.display = 'block';
+      document.getElementById('eligResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      try {
+        fetch('/.netlify/functions/submit-enquiry', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'eligibility', name: d.full_name, email: d.email, phone: d.phone, interest: d.destination, purpose: d.purpose, message: 'Result: ' + title + ' | History: ' + d.travel_history + ' | Funds: ' + d.funds + ' | Docs: ' + d.documents }) }).catch(function () {});
+      } catch (e) {}
+    }
+  });
+})();
+</script>
+</body>
+</html>
