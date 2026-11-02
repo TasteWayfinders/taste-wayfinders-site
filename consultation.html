@@ -172,8 +172,15 @@
 (function () {
   wireUpForm('consultForm', {
     successMessage: 'Thanks. Taking you to secure payment…',
-    onSuccess: function () {
-      setTimeout(function () { window.location.href = 'https://flutterwave.com/pay/tw-consultation'; }, 1200);
+    onSuccess: function (d) {
+      try {
+        fetch('/.netlify/functions/submit-enquiry', {
+          method: 'POST', keepalive: true,
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'consultation', name: d.full_name, email: d.email, phone: d.phone, interest: d.destination, purpose: d.purpose, message: d.question })
+        }).catch(function () {});
+      } catch (e) {}
+      setTimeout(function () { window.location.href = 'https://flutterwave.com/pay/tw-consultation'; }, 1800);
     }
   });
 })();
