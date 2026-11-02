@@ -70,25 +70,48 @@
   <section class="info-section">
     <div class="container">
       <div class="form-page-wrap">
-        <form id="eligForm" name="eligibility" method="POST" data-netlify="true" netlify-honeypot="bot-field">
-          <input type="hidden" name="form-name" value="eligibility">
-          <p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
-          <div class="form-row"><div class="field full"><label for="eDest">Where do you want to go?</label><select id="eDest" name="destination" required><option value="" disabled selected>Select an option</option><option>United Kingdom</option><option>Canada</option><option>Schengen / Europe</option></select></div></div>
-          <div class="form-row"><div class="field full"><label for="ePurpose">What is the purpose?</label><select id="ePurpose" name="purpose" required><option value="" disabled selected>Select an option</option><option>Visit / tourism</option><option>Study</option><option>Work</option><option>Business</option></select></div></div>
-          <div class="form-row"><div class="field full"><label for="eHistory">Your travel history</label><select id="eHistory" name="travel_history" required><option value="" disabled selected>Select an option</option><option>Travelled abroad before, with no refusals</option><option>Travelled abroad before, with a refusal</option><option>Never travelled abroad</option></select></div></div>
-          <div class="form-row"><div class="field full"><label for="eFunds">Are your funds ready?</label><select id="eFunds" name="funds" required><option value="" disabled selected>Select an option</option><option>Yes, I can show 6 months of healthy bank statements</option><option>Partly, I need to build up my funds</option><option>No, not yet</option></select></div></div>
-          <div class="form-row"><div class="field full"><label for="eDocs">Your supporting documents (employment or business proof, invitation or admission, accommodation, etc.)</label><select id="eDocs" name="documents" required><option value="" disabled selected>Select an option</option><option>Mostly ready</option><option>Some of them</option><option>Not started</option></select></div></div>
-          <div class="form-row">
-            <div class="field"><label for="eName">Full name</label><input type="text" id="eName" name="full_name" required></div>
-            <div class="field"><label for="eEmail">Email</label><input type="email" id="eEmail" name="email" required></div>
-          </div>
-          <div class="form-row"><div class="field full"><label for="ePhone">WhatsApp number</label><input type="tel" id="ePhone" name="phone" placeholder="+234 000 000 0000" required></div></div>
-          <div class="form-foot">
-            <p class="form-note">We use your details to send your result and follow up on WhatsApp. This is a general guide only and does not guarantee an outcome.</p>
-            <button type="submit" class="btn btn-dark">See my result</button>
-          </div>
-          <p class="form-status" id="eligStatus"></p>
-        </form>
+        <style>
+.wiz-bar{height:6px;background:#e8e4f0;border-radius:6px;margin:0 0 18px;overflow:hidden}
+.wiz-bar span{display:block;height:100%;background:#6C469C;transition:width .3s}
+.wiz-n{font-size:13px;color:#6b6480;font-weight:600;margin-bottom:6px}
+.wiz-q{font-size:21px;line-height:1.3;margin:0 0 14px;color:#301A4D}
+.wopt{display:block;width:100%;text-align:left;margin:8px 0;padding:14px 16px;border:1.5px solid #d9d2e8;border-radius:12px;background:#fff;font:inherit;font-size:16px;cursor:pointer;color:#301A4D}
+.wopt:hover,.wopt.sel{border-color:#6C469C;background:#f4effb}
+.wiz-back{background:none;border:0;color:#6C469C;font:inherit;font-weight:600;cursor:pointer;margin-top:12px;padding:4px 0}
+</style>
+<form id="eligForm" name="eligibility" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+  <input type="hidden" name="form-name" value="eligibility">
+  <p style="display:none;"><label>Do not fill this out if you are human: <input name="bot-field"></label></p>
+  <input type="hidden" name="destination">
+  <input type="hidden" name="purpose">
+  <input type="hidden" name="adults">
+  <input type="hidden" name="children">
+  <input type="hidden" name="employment">
+  <input type="hidden" name="emp_a">
+  <input type="hidden" name="emp_b">
+  <input type="hidden" name="emp_c">
+  <input type="hidden" name="funds">
+  <input type="hidden" name="travel_history">
+  <input type="hidden" name="refusals">
+  <input type="hidden" name="ties_property">
+  <input type="hidden" name="ties_family">
+  <input type="hidden" name="passport">
+  <input type="hidden" name="documents">
+  <input type="hidden" name="timeline">
+  <input type="hidden" name="summary">
+  <input type="hidden" name="result">
+  <div id="wiz"></div>
+  <div id="wizContact" style="display:none;">
+    <div class="wiz-bar"><span style="width:100%"></span></div>
+    <h2 class="wiz-q">Last step: where should we send your result?</h2>
+    <div class="form-row"><div class="field full"><label for="eName">Full name</label><input id="eName" name="full_name" type="text" required></div></div>
+    <div class="form-row"><div class="field"><label for="eEmail">Email</label><input id="eEmail" name="email" type="email" required></div><div class="field"><label for="ePhone">WhatsApp number</label><input id="ePhone" name="phone" type="tel" required></div></div>
+    <p style="font-size:13px;color:var(--muted);margin:8px 0 14px;">We use your details to follow up on WhatsApp. This is a general guide only and does not guarantee an outcome.</p>
+    <button type="submit" class="btn btn-dark">See my result</button>
+    <div><button type="button" class="wiz-back" id="wizBack2">&larr; Back</button></div>
+  </div>
+  <p class="form-status" id="eligStatus"></p>
+</form>
         <div class="note-banner" id="eligResult" style="display:none;margin-top:24px;">
           <strong id="eligTitle"></strong>
           <p id="eligText"></p>
@@ -150,38 +173,137 @@
 <script>
 (function () {
   var form = document.getElementById('eligForm');
+  var wiz = document.getElementById('wiz');
+  var contact = document.getElementById('wizContact');
+  var A = {};
+  var idx = 0;
+  function is(k, v) { return function () { return A[k] === v; }; }
+  var EMP = 'employment';
+  var steps = [
+    { k: 'destination', q: 'Where do you want to go?', o: ['United Kingdom', 'Canada', 'Schengen (Europe)', 'United States', 'China', 'Another country'] },
+    { k: 'purpose', q: 'What is the main purpose of the trip?', o: ['Tourism or visiting family and friends', 'Business trip or conference', 'Study', 'Medical treatment', 'Something else'] },
+    { k: 'adults', q: 'How many adults (18 and above) will apply, including you?', o: ['1', '2', '3', '4', '5 or more'] },
+    { k: 'children', q: 'How many children (under 18) will apply with you?', o: ['None', '1', '2', '3', '4 or more'] },
+    { k: EMP, q: 'What best describes your work situation?', o: ['Employed', 'Self-employed or business owner', 'Student', 'Retired', 'Not currently working'] },
+    { k: 'emp_a', q: 'How long have you been in your current job?', o: ['Less than 6 months', '6 months to 2 years', 'More than 2 years'], show: is(EMP, 'Employed') },
+    { k: 'emp_b', q: 'Can your employer give you a letter and approve your leave?', o: ['Yes', 'Not sure', 'No'], show: is(EMP, 'Employed') },
+    { k: 'emp_a', q: 'Is your business registered (CAC)?', o: ['Yes', 'In progress', 'No'], show: is(EMP, 'Self-employed or business owner') },
+    { k: 'emp_b', q: 'How long has the business been running?', o: ['Under 1 year', '1 to 3 years', 'Over 3 years'], show: is(EMP, 'Self-employed or business owner') },
+    { k: 'emp_c', q: 'Do you have business bank statements, tax records or invoices?', o: ['Yes, up to date', 'Some', 'No'], show: is(EMP, 'Self-employed or business owner') },
+    { k: 'emp_a', q: 'Do you have a school admission or enrolment letter?', o: ['Yes', 'In process', 'No'], show: is(EMP, 'Student') },
+    { k: 'emp_b', q: 'Who will pay for the trip?', o: ['Myself', 'Parents or family', 'Scholarship or sponsor'], show: is(EMP, 'Student') },
+    { k: 'emp_a', q: 'Do you receive a pension or regular income?', o: ['Yes', 'No'], show: is(EMP, 'Retired') },
+    { k: 'emp_a', q: 'Who will fund the trip?', o: ['A close relative in Nigeria', 'A sponsor abroad', 'My own savings', 'No one yet'], show: is(EMP, 'Not currently working') },
+    { k: 'funds', q: 'Can you show enough funds for the trip, with a steady bank history over the last 6 months?', o: ['Yes, steady for 6 months', 'Partly', 'No'] },
+    { k: 'travel_history', q: 'Have you travelled outside Nigeria before?', o: ['Yes, including UK, US, Canada or Schengen', 'Yes, other countries', 'Never travelled abroad'] },
+    { k: 'refusals', q: 'Have you ever had a visa refusal?', o: ['None', 'One, over 12 months ago', 'One, within the last 12 months', 'More than one'] },
+    { k: 'ties_property', q: 'Do you own property or land in Nigeria?', o: ['Yes', 'No'] },
+    { k: 'ties_family', q: 'Do you have a spouse, children or dependants who stay in Nigeria?', o: ['Yes', 'No'] },
+    { k: 'passport', q: 'What is the status of your international passport?', o: ['Valid for 6 months or more', 'Expires within 6 months', 'I do not have one'] },
+    { k: 'documents', q: 'How ready are your supporting documents (bank statements, letters, ID, photos)?', o: ['Mostly ready', 'Some ready', 'Not yet'] },
+    { k: 'timeline', q: 'When do you plan to travel?', o: ['Within 1 month', 'In 1 to 3 months', 'In more than 3 months', 'Just exploring'] }
+  ];
+  function vis(i) { return !steps[i].show || steps[i].show(); }
+  function save(k, v) { A[k] = v; if (form.elements[k]) form.elements[k].value = v; }
+  function visible() { return steps.filter(function (s, i) { return vis(i); }); }
+  function nextIdx(from) { var i = from + 1; while (i < steps.length && !vis(i)) i++; return i; }
+  function prevIdx(from) { var i = from - 1; while (i >= 0 && !vis(i)) i--; return i; }
+  function render() {
+    if (idx >= steps.length) { showContact(); return; }
+    contact.style.display = 'none'; wiz.style.display = 'block';
+    var s = steps[idx]; var v = visible(); var n = v.indexOf(s) + 1;
+    var h = '<div class="wiz-bar"><span style="width:' + Math.round((n - 1) / (v.length + 1) * 100) + '%"></span></div>';
+    h += '<div class="wiz-n">Question ' + n + ' of ' + v.length + '</div><h2 class="wiz-q"></h2><div id="wOpts"></div>';
+    if (prevIdx(idx) >= 0) h += '<button type="button" class="wiz-back" id="wBack">&larr; Back</button>';
+    wiz.innerHTML = h;
+    wiz.querySelector('.wiz-q').textContent = s.q;
+    var box = document.getElementById('wOpts');
+    s.o.forEach(function (label) {
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'wopt' + (A[s.k] === label ? ' sel' : ''); b.textContent = label;
+      b.addEventListener('click', function () {
+        if (s.k === EMP && A[EMP] !== label) { save('emp_a', ''); save('emp_b', ''); save('emp_c', ''); }
+        save(s.k, label); idx = nextIdx(idx); render();
+      });
+      box.appendChild(b);
+    });
+    var bk = document.getElementById('wBack'); if (bk) bk.addEventListener('click', function () { idx = prevIdx(idx); render(); });
+  }
+  function evaluate() {
+    var score = 0, tips = [], block = [];
+    if (A.funds === 'Yes, steady for 6 months') score += 2;
+    else if (A.funds === 'Partly') { score += 1; tips.push('Build and keep your funds steady in your account. Sudden large deposits raise questions.'); }
+    else { block.push('funds'); tips.push('Funds are the biggest gap. Plan how you will show genuine, traceable funds before applying.'); }
+    if (A.documents === 'Mostly ready') score += 2;
+    else if (A.documents === 'Some ready') { score += 1; tips.push('Gather the missing documents first. Our checklists show what to prepare.'); }
+    else tips.push('Start with the document checklist for your route.');
+    if (A.refusals === 'None') score += 2;
+    else if (A.refusals === 'One, over 12 months ago') { score += 1; tips.push('A previous refusal needs a careful, honest explanation in your new application.'); }
+    else if (A.refusals === 'One, within the last 12 months') tips.push('A recent refusal should be reviewed before you reapply. Do not reapply until the reason is addressed.');
+    else { block.push('refusals'); tips.push('Multiple refusals need a professional review of your file before any new application.'); }
+    if (A.travel_history === 'Yes, including UK, US, Canada or Schengen') score += 2;
+    else if (A.travel_history === 'Yes, other countries') score += 1;
+    else tips.push('With no travel history, strong ties to Nigeria and clear plans matter even more.');
+    score += (A.ties_property === 'Yes' ? 1 : 0) + (A.ties_family === 'Yes' ? 1 : 0);
+    if (A.ties_property !== 'Yes' && A.ties_family !== 'Yes') tips.push('Show other strong ties to Nigeria, such as a stable job, business or close family.');
+    if (A.passport !== 'Valid for 6 months or more') { block.push('passport'); tips.push('Get or renew your international passport first. It should be valid for at least 6 months beyond your trip.'); }
+    var p = 0, e = A[EMP];
+    if (e === 'Employed') {
+      if (A.emp_a !== 'Less than 6 months') p += 1; else tips.push('A very new job can weaken your ties. Bring your appointment letter and payslips.');
+      if (A.emp_b === 'Yes') p += 1; else tips.push('Get an employer letter and leave approval before applying.');
+    } else if (e === 'Self-employed or business owner') {
+      if (A.emp_a === 'Yes') p += 1; else tips.push('Register your business (CAC) and keep the certificate ready.');
+      if (A.emp_c === 'Yes, up to date') p += 1; else tips.push('Keep business bank statements, tax records or invoices up to date.');
+      if (A.emp_b === 'Under 1 year') tips.push('A business under a year old needs strong supporting records.');
+    } else if (e === 'Student') {
+      if (A.emp_a === 'Yes') p += 1; else tips.push('Get your school admission or enrolment letter first.');
+      if (A.emp_b !== 'Myself') p += 1; else tips.push('Show who is funding you, with proof of their funds.');
+    } else if (e === 'Retired') {
+      if (A.emp_a === 'Yes') p += 2; else tips.push('Show proof of pension or regular income.');
+    } else {
+      if (A.emp_a === 'No one yet') { block.push('sponsor'); tips.push('You need a funding source, such as a sponsor, with proof of funds before applying.'); }
+      else p += 1;
+    }
+    score += p;
+    return { score: score, tips: tips, block: block, qualifies: block.length === 0 && score >= 8 };
+  }
+  function applicants() {
+    var a = A.adults || '1'; var c = A.children || 'None';
+    return a + (a === '1' ? ' adult' : ' adults') + (c === 'None' ? '' : ', ' + c + (c === '1' ? ' child' : ' children'));
+  }
+  function summary(r) {
+    var prof = A[EMP] + (A.emp_a ? ' [' + [A.emp_a, A.emp_b, A.emp_c].filter(Boolean).join(' / ') + ']' : '');
+    return 'Destination: ' + A.destination + ' | Purpose: ' + A.purpose + ' | Applicants: ' + applicants() + ' | Work: ' + prof + ' | Funds: ' + A.funds + ' | Travel history: ' + A.travel_history + ' | Refusals: ' + A.refusals + ' | Property: ' + A.ties_property + ' | Dependants in Nigeria: ' + A.ties_family + ' | Passport: ' + A.passport + ' | Documents: ' + A.documents + ' | Timeline: ' + A.timeline + ' | Score: ' + r.score + '/12';
+  }
+  function showContact() {
+    var r = evaluate();
+    save('result', r.qualifies ? 'Qualified to apply' : 'Needs consultation');
+    save('summary', summary(r));
+    wiz.style.display = 'none'; contact.style.display = 'block';
+  }
+  document.getElementById('wizBack2').addEventListener('click', function () { idx = prevIdx(steps.length); render(); });
+  render();
   wireUpForm('eligForm', {
     successMessage: '',
     onSuccess: function (d) {
-      var score = 0, tips = [];
-      if (d.travel_history.indexOf('no refusals') > -1) score += 2;
-      else if (d.travel_history.indexOf('refusal') > -1) { score += 1; tips.push('A previous refusal needs a careful, honest explanation. Do not reapply until the reason is addressed.'); }
-      else tips.push('With no travel history, show strong ties to Nigeria (job or business, family, property).');
-      if (d.funds.indexOf('Yes') === 0) score += 2;
-      else if (d.funds.indexOf('Partly') === 0) { score += 1; tips.push('Build and keep your funds steady in your account. Sudden large deposits raise questions.'); }
-      else tips.push('Funds are the biggest gap. Plan how you will show genuine, traceable funds before applying.');
-      if (d.documents.indexOf('Mostly') === 0) score += 2;
-      else if (d.documents.indexOf('Some') === 0) { score += 1; tips.push('Gather the missing documents first. Our checklists show what to prepare.'); }
-      else tips.push('Start with the document checklist for your route.');
-      var title, text, qualifies = false;
- if (score >= 5) { qualifies = true; title = 'Good news: you can proceed to apply'; text = 'Based on your answers, you are in a good position to start your application for ' + d.destination + '. Start now and our team will guide you from there.'; }
- else { title = 'You need a professional consultation first'; text = 'Based on your answers, applying now for ' + d.destination + ' could be risky. A professional consultation will show you exactly what to fix and the right timing before you apply.'; }
+      var r = evaluate();
+      var title, text;
+      if (r.qualifies) { title = 'Good news: you can proceed to apply'; text = 'Based on your answers, you are in a good position to start your application for ' + A.destination + ' (' + applicants() + '). Start now and our team will guide you from there.'; }
+      else { title = 'You need a professional consultation first'; text = 'Based on your answers, applying now for ' + A.destination + ' could be risky. A professional consultation will show you exactly what to fix, and the right timing, before you apply.'; }
       document.getElementById('eligTitle').textContent = title;
-      document.getElementById('eligText').innerHTML = '';
-      var p = document.getElementById('eligText');
-      p.appendChild(document.createTextNode(text));
-      if (tips.length) { var ul = document.createElement('ul'); ul.style.margin = '8px 0 0 18px'; tips.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); }); p.appendChild(ul); }
+      var p = document.getElementById('eligText'); p.innerHTML = ''; p.appendChild(document.createTextNode(text));
+      if (r.tips.length) { var ul = document.createElement('ul'); ul.style.margin = '8px 0 0 18px'; r.tips.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); }); p.appendChild(ul); }
       var act = document.getElementById('eligActions'); act.innerHTML = '';
- var wa = 'https://wa.me/2349152395723?text=' + encodeURIComponent('Hello Taste Wayfinders, I passed the Visa Readiness Check for ' + d.destination + ' and I want to start my application. My name is ' + d.full_name + '.');
- var a1 = document.createElement('a'); a1.className = 'btn btn-dark';
- if (qualifies) { a1.href = wa; a1.target = '_blank'; a1.rel = 'noopener'; a1.textContent = 'Start my application on WhatsApp'; }
- else { a1.href = 'consultation.html'; a1.textContent = 'Book a professional consultation (₦20,000)'; }
- act.appendChild(a1);
- document.getElementById('eligResult').style.display = 'block';
-      document.getElementById('eligResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      var a1 = document.createElement('a'); a1.className = 'btn btn-dark';
+      if (r.qualifies) {
+        var msg = 'Hello Taste Wayfinders, I passed the Visa Readiness Check and I want to start my application. Name: ' + d.full_name + '. Destination: ' + A.destination + '. Purpose: ' + A.purpose + '. Applicants: ' + applicants() + '. Work: ' + A[EMP] + '. Timeline: ' + A.timeline + '.';
+        a1.href = 'https://wa.me/2349152395723?text=' + encodeURIComponent(msg); a1.target = '_blank'; a1.rel = 'noopener'; a1.textContent = 'Start my application on WhatsApp';
+      } else { a1.href = 'consultation.html'; a1.textContent = 'Book a professional consultation (₦20,000)'; }
+      act.appendChild(a1);
+      contact.style.display = 'none'; wiz.style.display = 'none';
+      var res = document.getElementById('eligResult'); res.style.display = 'block'; res.scrollIntoView({ behavior: 'smooth', block: 'center' });
       try {
         fetch('/.netlify/functions/submit-enquiry', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ source: 'eligibility', name: d.full_name, email: d.email, phone: d.phone, interest: d.destination, purpose: d.purpose, message: 'Result: ' + title + ' | History: ' + d.travel_history + ' | Funds: ' + d.funds + ' | Docs: ' + d.documents }) }).catch(function () {});
+          body: JSON.stringify({ source: 'eligibility', name: d.full_name, email: d.email, phone: d.phone, interest: A.destination, purpose: A.purpose, message: 'Result: ' + (r.qualifies ? 'QUALIFIED to apply' : 'NEEDS CONSULTATION') + ' | ' + summary(r) }) }).catch(function () {});
       } catch (e) {}
     }
   });
