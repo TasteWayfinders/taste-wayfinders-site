@@ -18,7 +18,8 @@ exports.handler = async (event) => {
   if (!name || !email) {
     return { statusCode: 400, body: JSON.stringify({ error: 'Missing required fields.' }) };
   }
-  const source = data.source === 'contact' ? 'contact' : 'consultation';
+  const allowed = ['contact', 'consultation', 'eligibility', 'newsletter'];
+  const source = allowed.indexOf(data.source) > -1 ? data.source : 'consultation';
 
   const baseId = process.env.AIRTABLE_BASE_ID;
   const token = process.env.AIRTABLE_TOKEN;
