@@ -439,7 +439,7 @@ document.addEventListener('DOMContentLoaded', initNavAuthState);
     addLink(document.getElementById('mobileMenu'));
     var fl = document.querySelector('.footer-col ul');
     if (fl && !fl.querySelector('a[href="consultation.html"]')) {
-      [['consultation.html', 'Book a Consultation'], ['eligibility.html', 'Free Visa Readiness Check'], ['checklists.html', 'Document Checklists'], ['results.html', 'Recent Approvals'], ['guides.html', 'Visa Guides'], ['citizenship.html', 'Grenada Citizenship'], ['founder.html', 'About the Founder']].forEach(function (x) {
+      [['consultation.html', 'Book a Consultation'], ['eligibility.html', 'Free Visa Readiness Check'], ['checklists.html', 'Document Checklists'], ['results.html', 'Recent Approvals'], ['guides.html', 'Visa Guides'], ['citizenship.html', 'Grenada Citizenship']].forEach(function (x) {
         var li = document.createElement('li');
         li.innerHTML = '<a href="' + x[0] + '">' + x[1] + '</a>';
         fl.appendChild(li);
