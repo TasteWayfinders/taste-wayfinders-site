@@ -92,7 +92,8 @@
         <div class="note-banner" id="eligResult" style="display:none;margin-top:24px;">
           <strong id="eligTitle"></strong>
           <p id="eligText"></p>
-          <p style="margin-top:10px;"><a href="consultation.html" class="btn btn-dark">Book a consultation (₦20,000)</a> &nbsp; <a href="checklists.html" style="font-weight:600;color:var(--purple-deep);">See document checklists →</a></p>
+          <p style="margin-top:10px;" id="eligActions"></p>
+      <p style="margin-top:10px;"> &nbsp; <a href="checklists.html" style="font-weight:600;color:var(--purple-deep);">See document checklists →</a></p>
           <p style="margin-top:10px;font-size:13px;color:var(--muted);">This check is a general guide, not a decision. Visa outcomes are decided by the relevant government.</p>
         </div>
       </div>
@@ -162,16 +163,21 @@
       if (d.documents.indexOf('Mostly') === 0) score += 2;
       else if (d.documents.indexOf('Some') === 0) { score += 1; tips.push('Gather the missing documents first. Our checklists show what to prepare.'); }
       else tips.push('Start with the document checklist for your route.');
-      var title, text;
-      if (score >= 5) { title = 'Looking well prepared'; text = 'You appear to be in a good position for ' + d.destination + '. A short consultation can confirm that your documents tell a consistent story before you apply.'; }
-      else if (score >= 3) { title = 'Nearly there: a few things to fix first'; text = 'You have a base to build on for ' + d.destination + ', but some areas need work before applying.'; }
-      else { title = 'Needs preparation before you apply'; text = 'Applying now could be risky for ' + d.destination + '. Let us help you plan the right steps and timing.'; }
+      var title, text, qualifies = false;
+ if (score >= 5) { qualifies = true; title = 'Good news: you can proceed to apply'; text = 'Based on your answers, you are in a good position to start your application for ' + d.destination + '. Start now and our team will guide you from there.'; }
+ else { title = 'You need a professional consultation first'; text = 'Based on your answers, applying now for ' + d.destination + ' could be risky. A professional consultation will show you exactly what to fix and the right timing before you apply.'; }
       document.getElementById('eligTitle').textContent = title;
       document.getElementById('eligText').innerHTML = '';
       var p = document.getElementById('eligText');
       p.appendChild(document.createTextNode(text));
       if (tips.length) { var ul = document.createElement('ul'); ul.style.margin = '8px 0 0 18px'; tips.forEach(function (t) { var li = document.createElement('li'); li.textContent = t; ul.appendChild(li); }); p.appendChild(ul); }
-      document.getElementById('eligResult').style.display = 'block';
+      var act = document.getElementById('eligActions'); act.innerHTML = '';
+ var wa = 'https://wa.me/2349152395723?text=' + encodeURIComponent('Hello Taste Wayfinders, I passed the Visa Readiness Check for ' + d.destination + ' and I want to start my application. My name is ' + d.full_name + '.');
+ var a1 = document.createElement('a'); a1.className = 'btn btn-dark';
+ if (qualifies) { a1.href = wa; a1.target = '_blank'; a1.rel = 'noopener'; a1.textContent = 'Start my application on WhatsApp'; }
+ else { a1.href = 'consultation.html'; a1.textContent = 'Book a professional consultation (₦20,000)'; }
+ act.appendChild(a1);
+ document.getElementById('eligResult').style.display = 'block';
       document.getElementById('eligResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
       try {
         fetch('/.netlify/functions/submit-enquiry', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
