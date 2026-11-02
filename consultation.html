@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Visa Consultation | Taste Wayfinders</title>
+<meta name="description" content="Book a one-on-one visa consultation with Taste Wayfinders. Tell us your enquiry, pay the ₦20,000 consultation fee and get expert guidance.">
+<link rel="icon" href="assets/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16x16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* Compact hero for this ad landing page — gets visitors to the form faster */
+  .page-hero{ padding:108px 0 26px; }
+  .page-hero h1{ margin:12px 0 10px; }
+  .page-hero p.lead{ margin-bottom:0; }
+  .info-section{ padding:32px 0 70px; }
+  @media (max-width:640px){
+    .page-hero{ padding:90px 0 22px; }
+  }
+</style>
+<script defer src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="container nav-inner">
+    <a href="index.html" aria-label="Taste Wayfinders home">
+      <img src="assets/logo-white.png" alt="Taste Wayfinders" class="logo-mark logo-white">
+      <img src="assets/logo-color.png" alt="Taste Wayfinders" class="logo-mark logo-color">
+    </a>
+    <nav class="nav-links">
+      <a href="index.html#about">About</a>
+      <a href="index.html#explore">Visas &amp; Relocation</a>
+      <a href="index.html#services">Services</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="account.html" class="btn btn-ghost">Log in</a>
+      <a href="index.html#contact" class="btn btn-primary">Plan My Trip</a>
+    </div>
+    <button class="burger" id="burger" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+  <div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <a href="index.html#about">About</a>
+    <a href="index.html#explore">Visas &amp; Relocation</a>
+    <a href="index.html#services">Services</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="account.html">Log in</a>
+    <a href="index.html#contact" class="btn btn-primary" style="margin-top:10px;">Plan My Trip</a>
+  </div>
+
+<main>
+  <section class="page-hero">
+    <div class="color-field"><span class="b1"></span><span class="b2"></span><span class="b3"></span></div>
+    <div class="container">
+      <span class="eyebrow">Visa consultation · ₦20,000</span>
+      <h1>Book a Visa Consultation</h1>
+      <p class="lead">One-on-one guidance on your visa, study or relocation plan from our consultants.</p>
+    </div>
+  </section>
+
+  <section class="info-section">
+    <div class="container">
+      <div class="form-page-wrap">
+        <div class="note-banner" style="margin-bottom:22px;">
+          <strong>How it works</strong>
+          <p>1. Tell us about your enquiry below. &nbsp;2. Pay the ₦20,000 consultation fee securely online. &nbsp;3. We contact you on WhatsApp to confirm your session.</p>
+          <p style="margin-top:8px;font-size:13.5px;">The consultation fee is separate from visa fees and from our professional processing fee. Processing fees are quoted for your specific case after your consultation.</p>
+        </div>
+        <form id="consultForm" name="consultation" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+          <input type="hidden" name="form-name" value="consultation">
+          <p style="display:none;"><label>Don't fill this out if you're human: <input name="bot-field"></label></p>
+          <div class="form-row">
+            <div class="field"><label for="cName">Full name</label><input type="text" id="cName" name="full_name" placeholder="Adaeze Okafor" required></div>
+            <div class="field"><label for="cEmail">Email</label><input type="email" id="cEmail" name="email" placeholder="you@example.com" required></div>
+          </div>
+          <div class="form-row">
+            <div class="field full"><label for="cPhone">WhatsApp number</label><input type="tel" id="cPhone" name="phone" placeholder="+234 000 000 0000" required></div>
+          </div>
+          <div class="form-row">
+            <div class="field full">
+              <label for="cCountry">Which country or route are you asking about?</label>
+              <select id="cCountry" name="destination" required>
+                <option value="" disabled selected>Select an option</option>
+                <option>United Kingdom</option><option>Canada</option><option>Schengen / Europe</option>
+                <option>United States</option><option>China</option><option>Citizenship or residence by investment</option><option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field full">
+              <label for="cPurpose">Purpose</label>
+              <select id="cPurpose" name="purpose" required>
+                <option value="" disabled selected>Select an option</option>
+                <option>Visit / tourism</option><option>Study</option><option>Work</option><option>Business</option><option>Relocation / migration</option><option>Not sure yet</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field full"><label for="cQuestion">What would you like to ask?</label><textarea id="cQuestion" name="question" rows="4" placeholder="Briefly describe your situation, including any previous refusals." required></textarea></div>
+          </div>
+          <div class="form-foot">
+            <p class="form-note">After you submit, you'll be taken to our secure Flutterwave page to pay the consultation fee of ₦20,000. Your session is confirmed once payment is received. Your details are kept confidential.</p>
+            <button type="submit" class="btn btn-dark">Continue to payment
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+          <p class="form-status" id="consultStatus"></p>
+          <p style="font-size:13px;margin-top:10px;">Already submitted your enquiry? <a href="https://flutterwave.com/pay/tw-consultation" style="font-weight:600;color:var(--purple-deep);">Pay the consultation fee →</a></p>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo-white.png" alt="Taste Wayfinders" style="height:30px;width:auto;">
+        <p>Find your way. Taste the world. Purposeful travel, visa consultation, and relocation support — from Africa to the world.</p>
+        <div class="footer-social">
+          <a href="https://www.instagram.com/taste_wayfinders?igsh=MWU5NXVlZ2lyOWxtdg%3D%3D&utm_source=qr" target="_blank" rel="noopener" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg></a>
+          <a href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+          <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg></a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html#about">About</a></li>
+          <li><a href="index.html#explore">Visas &amp; Relocation</a></li>
+          <li><a href="index.html#services">Services</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Popular guides</h4>
+        <ul>
+          <li><a href="relocation-by-investment.html">Relocation by Investment</a></li>
+          <li><a href="uk-tourist-visa.html">UK Tourist Visa</a></li>
+          <li><a href="canada-study-visa.html">Canada Study Permit</a></li>
+          <li><a href="schengen-study-visa.html">Schengen Study Visa</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="mailto:info@tastetravels.net">info@tastetravels.net</a></li>
+          <li><a href="tel:+2349152395723">+234 915 239 5723</a></li>
+          <li><a href="index.html#contact">Lagos, Nigeria</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Taste Wayfinders. All rights reserved.</span>
+      <span><a href="#">Privacy Policy</a> · <a href="#">Terms</a></span>
+    </div>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+(function () {
+  wireUpForm('consultForm', {
+    successMessage: 'Thanks. Taking you to secure payment…',
+    onSuccess: function () {
+      setTimeout(function () { window.location.href = 'https://flutterwave.com/pay/tw-consultation'; }, 1200);
+    }
+  });
+})();
+</script>
+</body>
+</html>
