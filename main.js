@@ -448,3 +448,5 @@ document.addEventListener('DOMContentLoaded', initNavAuthState);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init); else init();
 })();
+
+(function(){ try{ function fix(){ document.querySelectorAll('.footer-bottom a').forEach(function(a){ var t=(a.textContent||'').trim(); if(t==='Privacy Policy') a.setAttribute('href','privacy.html'); else if(t==='Terms') a.setAttribute('href','terms.html'); }); } if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fix); else fix(); }catch(e){} })();
