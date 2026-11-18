@@ -113,6 +113,29 @@
   </div>
   <p class="form-status" id="eligStatus"></p>
 </form>
+        <style>
+          .calc{display:none;text-align:center;margin-top:24px;}
+          .calc-ring{position:relative;width:180px;height:180px;margin:0 auto;}
+          .calc-ring svg{width:100%;height:100%;transform:rotate(-90deg);}
+          .calc-ring .trk{fill:none;stroke:#E7DFF1;stroke-width:9;}
+          .calc-ring .prg{fill:none;stroke:#6C469C;stroke-width:9;stroke-linecap:round;stroke-dasharray:326.73;stroke-dashoffset:326.73;}
+          .calc-ring .spin{fill:none;stroke:#301A4D;stroke-width:9;stroke-linecap:round;stroke-dasharray:46 281;transform-origin:60px 60px;animation:calcSpin 1s linear infinite;}
+          .calc-ring.done .spin{display:none;}
+          .calc-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:700;color:#301A4D;font-family:'Fredoka',sans-serif;}
+          .calc-num small{font-size:22px;margin-left:2px;}
+          .calc-msg{margin-top:14px;font-weight:600;color:#301A4D;min-height:24px;}
+          .calc-label{font-size:13px;color:var(--muted);}
+          @keyframes calcSpin{to{transform:rotate(360deg);}}
+          @media (prefers-reduced-motion:reduce){.calc-ring .spin{animation:none;}}
+        </style>
+        <div class="calc" id="eligCalc" aria-live="polite">
+          <div class="calc-ring" id="calcRing">
+            <svg viewBox="0 0 120 120" aria-hidden="true"><circle class="trk" cx="60" cy="60" r="52"/><circle class="prg" id="calcPrg" cx="60" cy="60" r="52"/><circle class="spin" cx="60" cy="60" r="52"/></svg>
+            <div class="calc-num"><span id="calcNum">0</span><small>%</small></div>
+          </div>
+          <p class="calc-msg" id="calcMsg">Reading your answers...</p>
+          <p class="calc-label" id="calcLabel">Your readiness score</p>
+        </div>
         <div class="note-banner" id="eligResult" style="display:none;margin-top:24px;">
           <strong id="eligTitle"></strong>
           <p id="eligText"></p>
@@ -277,7 +300,10 @@
       else p += 1;
     }
     score += p;
-    return { score: score, tips: tips, block: block, qualifies: block.length === 0 && score >= 8 };
+    var qualifies = block.length === 0 && score >= 8;
+    var pct = Math.round(score / 12 * 100);
+    pct = qualifies ? Math.max(pct, 67) : Math.min(pct, 64);
+    return { score: score, pct: pct, tips: tips, block: block, qualifies: qualifies };
   }
   function applicants() {
     var a = A.adults || '1'; var c = A.children || 'None';
@@ -285,7 +311,7 @@
   }
   function summary(r) {
     var prof = A[EMP] + (A.emp_a ? ' [' + [A.emp_a, A.emp_b, A.emp_c].filter(Boolean).join(' / ') + ']' : '');
-    return 'Destination: ' + dest() + ' | Purpose: ' + A.purpose + ' | Applicants: ' + applicants() + ' | Work: ' + prof + ' | Funds: ' + A.funds + ' | Travel history: ' + A.travel_history + ' | Refusals: ' + A.refusals + ' | Property: ' + A.ties_property + ' | Dependants in Nigeria: ' + A.ties_family + ' | Passport: ' + A.passport + ' | Documents: ' + A.documents + ' | Timeline: ' + A.timeline + ' | Score: ' + r.score + '/12';
+    return 'Destination: ' + dest() + ' | Purpose: ' + A.purpose + ' | Applicants: ' + applicants() + ' | Work: ' + prof + ' | Funds: ' + A.funds + ' | Travel history: ' + A.travel_history + ' | Refusals: ' + A.refusals + ' | Property: ' + A.ties_property + ' | Dependants in Nigeria: ' + A.ties_family + ' | Passport: ' + A.passport + ' | Documents: ' + A.documents + ' | Timeline: ' + A.timeline + ' | Score: ' + r.score + '/12 (' + r.pct + '%)';
   }
   function showContact() {
     var r = evaluate();
@@ -299,6 +325,44 @@
     successMessage: '',
     onSuccess: function (d) {
       var r = evaluate();
+      var tipsOut = r.tips.slice(0, 6);
+      // Save the lead and send the personalised result email (server side).
+      try {
+        fetch('/.netlify/functions/submit-enquiry', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ source: 'eligibility', name: d.full_name, email: d.email, phone: d.phone, interest: dest(), purpose: A.purpose, message: 'Result: ' + (r.qualifies ? 'QUALIFIED to apply' : 'NEEDS CONSULTATION') + ' | ' + summary(r),
+            mail: { pct: r.pct, qualified: r.qualifies, tips: tipsOut } }) }).catch(function () {});
+      } catch (e) {}
+      contact.style.display = 'none'; wiz.style.display = 'none';
+      runCalc(r.pct, r.qualifies, function () { showResult(r, d); });
+    }
+  });
+  function runCalc(pct, ok, done) {
+    var box = document.getElementById('eligCalc'), num = document.getElementById('calcNum'), prg = document.getElementById('calcPrg'),
+        msg = document.getElementById('calcMsg'), lab = document.getElementById('calcLabel'), ring = document.getElementById('calcRing');
+    var C = 326.73;
+    var steps = ['Reading your answers...', 'Checking your funds and documents...', 'Weighing your travel history and ties...', 'Working out your readiness score...'];
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var dur = reduce ? 600 : 4800, start = null;
+    box.style.display = 'block'; box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    function frame(ts) {
+      if (start === null) start = ts;
+      var t = Math.min(1, (ts - start) / dur);
+      var e = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      var v = Math.round(pct * e);
+      num.textContent = v;
+      prg.style.strokeDashoffset = String(C * (1 - v / 100));
+      msg.textContent = steps[Math.min(steps.length - 1, Math.floor(t * steps.length))];
+      if (t < 1) { requestAnimationFrame(frame); return; }
+      num.textContent = pct; prg.style.strokeDashoffset = String(C * (1 - pct / 100));
+      ring.className = 'calc-ring done';
+      msg.textContent = ok ? 'You are ready to apply' : 'You need a consultation first';
+      lab.textContent = 'Your readiness score. A guide only, not a visa decision.';
+      setTimeout(done, reduce ? 0 : 900);
+    }
+    requestAnimationFrame(frame);
+  }
+  function showResult(r, d) {
+    {
       var title, text;
       if (r.qualifies) { title = 'Good news: you can proceed to apply'; text = 'Based on your answers, you are in a good position to start your application for ' + dest() + ' (' + applicants() + '). Start now and our team will guide you from there.'; }
       else { title = 'You need a professional consultation first'; text = 'Based on your answers, applying now for ' + dest() + ' could be risky. A professional consultation will show you exactly what to fix, and the right timing, before you apply.'; }
@@ -312,14 +376,9 @@
         a1.href = 'https://wa.me/2349152395723?text=' + encodeURIComponent(msg); a1.target = '_blank'; a1.rel = 'noopener'; a1.textContent = 'Start my application on WhatsApp';
       } else { a1.href = 'consultation.html'; a1.textContent = 'Book a professional consultation (₦20,000)'; }
       act.appendChild(a1);
-      contact.style.display = 'none'; wiz.style.display = 'none';
       var res = document.getElementById('eligResult'); res.style.display = 'block'; res.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      try {
-        fetch('/.netlify/functions/submit-enquiry', { method: 'POST', keepalive: true, headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ source: 'eligibility', name: d.full_name, email: d.email, phone: d.phone, interest: dest(), purpose: A.purpose, message: 'Result: ' + (r.qualifies ? 'QUALIFIED to apply' : 'NEEDS CONSULTATION') + ' | ' + summary(r) }) }).catch(function () {});
-      } catch (e) {}
     }
-  });
+  }
 })();
 </script>
 </body>
