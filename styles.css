@@ -1311,3 +1311,31 @@
   .twf-chat-panel{ right:16px; bottom:88px; width:calc(100vw - 32px); }
   .twf-chat-bubble{ right:16px; bottom:16px; }
 }
+
+/* NAV TIDY */
+.nav-inner{ gap:28px; }
+.logo-mark{ flex-shrink:0; }
+.nav-links{ gap:26px; font-size:15px; flex:1; justify-content:center; }
+.nav-links a{ white-space:nowrap; }
+.nav-cta{ flex-shrink:0; gap:12px; }
+.nav-cta .btn{ white-space:nowrap; }
+@media (max-width:1240px){
+  .nav-inner{ gap:18px; }
+  .nav-links{ gap:18px; font-size:14px; }
+}
+@media (min-width:721px) and (max-width:1100px){
+  .nav-links, .nav-cta .btn-ghost{ display:none; }
+  .burger{ display:block; }
+  .nav-cta{ margin-left:auto; margin-right:16px; }
+  .mobile-menu{
+    display:flex; position:fixed; inset:0; background:var(--purple-deep); z-index:150;
+    flex-direction:column; align-items:center; justify-content:center; gap:30px;
+    font-family:'Fredoka',sans-serif; font-size:24px; color:var(--white);
+    transform:translateY(-100%); visibility:hidden; opacity:0;
+    transition:transform .4s ease, opacity .4s ease, visibility 0s linear .4s;
+  }
+  .mobile-menu.open{
+    transform:translateY(0); visibility:visible; opacity:1;
+    transition:transform .4s ease, opacity .4s ease, visibility 0s linear 0s;
+  }
+}
